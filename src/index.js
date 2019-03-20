@@ -1,49 +1,56 @@
 import fs from 'fs';
 import path from 'path';
-import prettier from 'prettier';
 import { parse } from 'react-docgen';
+import * as dom from 'dts-dom';
+
+import getType from './getType';
 
 function run(options = {}) {
   const content = fs.readFileSync(options.input);
   const componentInfo = parse(content);
+  let result = '';
+
   if (componentInfo) {
-    let result = `import * as React from 'react'\r\n\r\n`;
+    const importDefinition = dom.create.importAll('React', 'react');
+    result += dom.emit(importDefinition);
+
     if (componentInfo.props) {
       const props = componentInfo.props;
       const keys = Object.keys(props);
-      result += `declare interface ${componentInfo.displayName}Props {\r\n`;
+      const propsDefinition = dom.create.interface(`${componentInfo.displayName}Props`);
 
       if (keys.length > 0) {
         keys.forEach((key, index) => {
           const required = props[key].required;
-          result += `  ${key}${required ? '?' : ''}: ${props[key].type.name};`
-          if (index !== keys.length - 1) {
-            result += `\r\n`;
-          }
+          const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+
+          propsDefinition.members.push(
+            dom.create.property(key, getType(props[key].type.name), flag)
+          );
         });
       }
-      result += `\r\n}\r\n\r\n`
+      result += dom.emit(propsDefinition);
     }
+
+    const classDefinition = dom.create.class(`${componentInfo.displayName}`, dom.DeclarationFlags.ExportDefault);
+    classDefinition.baseType = `React.Component<${componentInfo.displayName}Props>`
 
     if (componentInfo.methods) {
-      result += `declare interface ${componentInfo.displayName}Instance {\r\n`;
       componentInfo.methods.forEach((method, index) => {
         const { params, returns } = method;
-        let parameters = '(';
+        const parameters = [];
         if (params && params.length > 0) {
           params.forEach((param) => {
-            parameters += `${param.name}: ${param.type ? param.type.name : 'any'},`
+            const type = param.type ? param.type.name : 'any';
+            parameters.push(dom.create.parameter(param.name, getType(type)))
           });
         }
-        parameters += ')';
-        result += `  ${method.name}${parameters}: ${returns ? returns.type.name : 'any'};`
-
+        const returnType = returns ? returns.type.name : 'any';
+        classDefinition.members.push(dom.create.method(method.name, parameters, getType(returnType)))
       });
-      result += `\r\n}\r\n\r\n`
     }
 
-    result += `export default class ${componentInfo.displayName} extends React.Component<BasicComponentProps> { }\r\n`
-    result = prettier.format(result, { parser: 'babel' });
+    result += dom.emit(classDefinition);
     if (result) {
       const fileName = options.output || options.input.split('.')[0] + '.d.ts';
       fs.writeFileSync(

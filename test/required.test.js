@@ -9,5 +9,10 @@ describe('Required test', () => {
       input: path.join(__dirname, 'required.js'),
       output: path.join(__dirname, 'tmp', 'required.d.ts'),
     });
+
+    const file1 = fs.readFileSync(path.join(__dirname, 'tmp', 'required.d.ts'), 'utf8');
+    const file2 = fs.readFileSync(path.join(__dirname, 'typings', 'required.d.ts'), 'utf8');
+
+    assert.strictEqual(file1, file2);
   });
 });

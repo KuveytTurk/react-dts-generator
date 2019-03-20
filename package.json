@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dts-dom": "^3.1.1",
     "react-docgen": "^4.0.1"
   },
   "devDependencies": {

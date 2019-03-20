@@ -9,5 +9,10 @@ describe('Instance methods', () => {
       input: path.join(__dirname, 'method.js'),
       output: path.join(__dirname, 'tmp', 'method.d.ts'),
     });
+
+    const file1 = fs.readFileSync(path.join(__dirname, 'tmp', 'method.d.ts'), 'utf8');
+    const file2 = fs.readFileSync(path.join(__dirname, 'typings', 'method.d.ts'), 'utf8');
+
+    assert.strictEqual(file1, file2);
   });
 });
