@@ -6,7 +6,7 @@ import run from '../src';
 describe('Instance methods', () => {
 	it('should create instance methods', () => {
 		run({
-			input: path.join(__dirname, 'method.js'),
+			input: path.join(__dirname, '..', '..', 'baselines', 'method.js'),
 			output: path.join(__dirname, 'tmp', 'method.d.ts'),
 		});
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
 class BasicComponent extends React.Component {
-	constructor(props: any, context: any) {
+	constructor(props, context) {
 		super(props, context);
 		this.foo = this.foo.bind(this);
 	}
@@ -15,7 +15,7 @@ class BasicComponent extends React.Component {
 	 * @param {number} number - The param value.
 	 * @return {number} returns a number value
 	 */
-	foo(number: number) {
+	foo(number) {
 		return number;
 	}
 
@@ -32,7 +32,7 @@ class BasicComponent extends React.Component {
 	 * @param {string} second
 	 * @returns {array}
 	 */
-	multiple(first: number, second: string) {
+	multiple(first, second) {
 		return [first, second];
 	}
 }

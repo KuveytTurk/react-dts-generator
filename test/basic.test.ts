@@ -11,7 +11,7 @@ describe('Basic test', () => {
 	});
 	it('should create typings with basically', () => {
 		run({
-			input: path.join(__dirname, 'basic.js'),
+			input: path.join(__dirname, '..', '..', 'baselines', 'basic.js'),
 			output: path.join(__dirname, 'tmp', 'basic.d.ts'),
 		});
 

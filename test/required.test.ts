@@ -6,7 +6,7 @@ import run from '../src';
 describe('Required test', () => {
 	it('should create typings with required', () => {
 		run({
-			input: path.join(__dirname, 'required.js'),
+			input: path.join(__dirname, '..', '..', 'baselines', 'required.js'),
 			output: path.join(__dirname, 'tmp', 'required.d.ts'),
 		});
 
