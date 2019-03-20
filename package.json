@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/index.js",
-    "test": "cross-env NODE_ENV=test mocha"
+    "test": "mocha bin/test/*.js",
+    "build": "tsc",
+    "lint": "tslint --project tsconfig.json --format stylish"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "dts-dom": "^3.1.1",
-    "react-docgen": "^4.0.1"
+    "react-docgen": "^4.0.1",
+    "typescript": "^3.3.4000"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
@@ -24,12 +26,20 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.11.4",
+    "@types/parse-git-config": "^3.0.0",
+    "@types/prop-types": "^15.7.0",
+    "@types/react": "^16.8.8",
+    "@types/yargs": "^12.0.10",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "diff": "^4.0.1",
     "mocha": "^6.0.2",
     "prettier": "^1.16.4",
     "prop-types": "^15.7.2",
-    "react": "^16.8.3"
+    "react": "^16.8.3",
+    "tslint": "^5.14.0"
   }
 }

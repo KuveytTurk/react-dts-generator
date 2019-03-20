@@ -1,2 +1,5 @@
 */tmp/*.d.ts
 node_modules
+bin/
+npm-debug.log
+.DS_Store
