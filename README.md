@@ -19,7 +19,7 @@ import { generate } from 'react-dts-generator';
 const string = generate(options);
 ```
 
-## Options
+### Options
 
 #### `input: string`
 
@@ -35,7 +35,7 @@ The `.js` file that contains React Component. `react-dts-generator` use the [`re
 
 The `.d.ts` file that contains typescript definitions. If not specified output file will be exported to the same location of the input file.
 
-### `propTypesComposition: array`
+#### `propTypesComposition: array`
 
 If the component propTypes has composes by another component's propTypes, and typescript definitions of the other component were already generated they could be imported and generated types extend from them.
 
@@ -50,5 +50,7 @@ If the component propTypes has composes by another component's propTypes, and ty
 			{
 				named: 'ComponentBaseProps',
 				from: '@kuveytturk/boa-base/ComponentBase',
-			}]
+			}],
+
+		});
 ```
