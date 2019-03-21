@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { assert } from 'chai';
-import run from '../src';
+import { generate } from '../src';
 
 describe('Instance methods', () => {
 	before(() => {
@@ -14,7 +14,7 @@ describe('Instance methods', () => {
 	});
 
 	it('should create instance methods', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'method', 'method.js'),
 			output: path.join(__dirname, 'tmp', 'method', 'method.d.ts'),
 		});

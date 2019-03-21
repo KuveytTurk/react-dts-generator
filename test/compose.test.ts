@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { assert } from 'chai';
-import run from '../src';
+import { generate } from '../src';
 
 describe('Compose test', () => {
 	before(() => {
@@ -15,12 +15,12 @@ describe('Compose test', () => {
 	});
 
 	it('should create typings with single compose', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'single.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'single.d.ts'),
 			propTypesComposition: [{
-				default: 'BasicComponentProps',
-				from: '../basic',
+				named: 'BasicComponentProps',
+				from: '../basic/basic',
 			}],
 		});
 
@@ -32,7 +32,7 @@ describe('Compose test', () => {
 	});
 
 	it('should create typings with multiple compose', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'multiple.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'multiple.d.ts'),
 			propTypesComposition: [{
@@ -52,7 +52,7 @@ describe('Compose test', () => {
 	});
 
 	it('should create typings with module compose', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'module.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'module.d.ts'),
 			propTypesComposition: [{

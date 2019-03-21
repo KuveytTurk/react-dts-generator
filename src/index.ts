@@ -17,7 +17,7 @@ export interface Options {
 
 export declare type ImportType = dom.ImportAllDeclaration | dom.ImportDefaultDeclaration | dom.ImportNamedDeclaration;
 
-function run(options: Options): string {
+export function generate(options: Options): string {
 	const content: string = fs.readFileSync(options.input, 'utf8');
 	const componentInfo = parse(content);
 	let result: string = '';
@@ -90,5 +90,3 @@ function run(options: Options): string {
 
 	return result;
 }
-
-export default run;

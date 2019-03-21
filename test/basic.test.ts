@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { assert } from 'chai';
-import run from '../src';
+import { generate } from '../src';
 
 describe('Basic test', () => {
 	before(() => {
@@ -14,7 +14,7 @@ describe('Basic test', () => {
 	});
 
 	it('should create typings with basically', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'basic', 'basic.js'),
 			output: path.join(__dirname, 'tmp', 'basic', 'basic.d.ts'),
 		});
@@ -26,7 +26,7 @@ describe('Basic test', () => {
 	});
 
 	it('should create typings with required', () => {
-		const result = run({
+		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'basic', 'required.js'),
 			output: path.join(__dirname, 'tmp', 'basic', 'required.d.ts'),
 		});
