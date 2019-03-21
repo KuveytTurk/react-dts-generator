@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import BasicComponentProps from '../basic';
+import {BasicComponentProps} from '../basic/basic';
 
 declare interface ComposedComponentProps extends BasicComponentProps{
     temp?: any;
