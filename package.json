@@ -12,7 +12,6 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
-		"dts-dom": "^3.1.1",
 		"react-docgen": "^4.0.1",
 		"typescript": "^3.3.4000"
 	},

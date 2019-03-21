@@ -1,4 +1,4 @@
-import * as dom from 'dts-dom';
+import * as dom from './dts-dom';
 import * as fs from 'fs';
 import { parse } from 'react-docgen';
 import getType from './getType';

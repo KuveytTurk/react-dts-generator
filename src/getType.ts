@@ -1,4 +1,4 @@
-import * as dom from 'dts-dom';
+import * as dom from './dts-dom';
 
 export default (type: string): dom.Type => {
 	switch (type.toLowerCase()) {

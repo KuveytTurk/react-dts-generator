@@ -32,5 +32,10 @@
 		"variable-name": false,
 		"no-implicit-dependencies": false,
 		"ordered-imports": false
-  }
+	},
+	"linterOptions": {
+		"exclude": [
+			"src/dts-dom/*"
+		]
+	}
 }

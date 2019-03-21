@@ -1353,11 +1353,6 @@ dom-helpers@^3.2.1, dom-helpers@^3.3.1:
   dependencies:
     "@babel/runtime" "^7.1.2"
 
-dts-dom@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.1.1.tgz#1e706020f992e1d8d4e402cd3b4506b13fffaa8d"
-  integrity sha512-ogQV2DPcph6Ku+/ceDd8XsF3QqTCy/bhPqBB8/1ZwbBzi3QKtWaVYZHT4pgqF7wN9/PRehmRJTqz+McKXq3W7w==
-
 electron-to-chromium@^1.3.116:
   version "1.3.116"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.116.tgz#1dbfee6a592a0c14ade77dbdfe54fef86387d702"
