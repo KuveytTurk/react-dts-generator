@@ -3,24 +3,48 @@ import * as fs from 'fs';
 import { parse } from 'react-docgen';
 import getType from './getType';
 
+export interface CompositionType {
+	named?: string;
+	default?: string;
+	from: string;
+}
+
 export interface Options {
 	input: string;
 	output: string;
+	propTypesComposition?: CompositionType[];
 }
 
-function run(options: Options) {
+export declare type ImportType = dom.ImportAllDeclaration | dom.ImportDefaultDeclaration | dom.ImportNamedDeclaration;
+
+function run(options: Options): string {
 	const content: string = fs.readFileSync(options.input, 'utf8');
 	const componentInfo = parse(content);
 	let result: string = '';
-
+	const importDefinitions: ImportType[] = [];
 	if (componentInfo) {
 		const importDefinition = dom.create.importAll('React', 'react');
-		result += dom.emit(importDefinition);
+		importDefinitions.push(importDefinition);
 
 		if (componentInfo.props) {
 			const props = componentInfo.props;
 			const keys = Object.keys(props);
 			const propsDefinition = dom.create.interface(`${componentInfo.displayName}Props`);
+
+			if (options.propTypesComposition && options.propTypesComposition.length > 0) {
+				propsDefinition.baseTypes = [];
+				options.propTypesComposition.forEach(x => {
+					if (x.default) {
+						importDefinitions.push(dom.create.importDefault(x.default, x.from));
+						// @ts-ignore
+						propsDefinition.baseTypes.push(x.default);
+					} else if (x.named) {
+						importDefinitions.push(dom.create.importNamed(x.named, x.from));
+						// @ts-ignores
+						propsDefinition.baseTypes.push(x.named);
+					}
+				});
+			}
 
 			if (keys.length > 0) {
 				keys.forEach(key => {
@@ -30,6 +54,7 @@ function run(options: Options) {
 					propsDefinition.members.push(prop);
 				});
 			}
+			importDefinitions.forEach(item => result += dom.emit(item));
 			result += dom.emit(propsDefinition);
 		}
 
@@ -62,6 +87,8 @@ function run(options: Options) {
 			);
 		}
 	}
+
+	return result;
 }
 
 export default run;
