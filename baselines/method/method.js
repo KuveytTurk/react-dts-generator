@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
-class BasicComponent extends React.Component {
+class MethodComponent extends React.Component {
 	constructor(props, context) {
 		super(props, context);
 		this.foo = this.foo.bind(this);
@@ -36,4 +36,5 @@ class BasicComponent extends React.Component {
 		return [first, second];
 	}
 }
-export default BasicComponent;
+
+export default MethodComponent;

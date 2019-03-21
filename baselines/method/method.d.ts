@@ -1,12 +1,15 @@
 import * as React from 'react';
 
-declare interface BasicComponentProps {
+declare interface MethodComponentProps {
     temp?: any;
 }
 
-export default class BasicComponent extends React.Component<BasicComponentProps> {
+export default class MethodComponent extends React.Component<MethodComponentProps> {
     foo(number: number): number;
+
     bar(): string;
+
     multiple(first: number, second: string): any[];
+
 }
 

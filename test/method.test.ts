@@ -4,18 +4,24 @@ import { assert } from 'chai';
 import run from '../src';
 
 describe('Instance methods', () => {
+	before(() => {
+		if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
+			fs.mkdirSync(path.join(__dirname, 'tmp'));
+		}
+		if (!fs.existsSync(path.join(__dirname, 'tmp', 'method'))) {
+			fs.mkdirSync(path.join(__dirname, 'tmp', 'method'));
+		}
+	});
+
 	it('should create instance methods', () => {
-		run({
-			input: path.join(__dirname, '..', '..', 'baselines', 'method.js'),
-			output: path.join(__dirname, 'tmp', 'method.d.ts'),
+		const result = run({
+			input: path.join(__dirname, '..', '..', 'baselines', 'method', 'method.js'),
+			output: path.join(__dirname, 'tmp', 'method', 'method.d.ts'),
 		});
 
-		const testPath = path.join(__dirname, 'tmp', 'basic.d.ts');
-		const file1 = fs.readFileSync(testPath, 'utf8');
+		const basePath = path.join(__dirname, '..', '..', 'baselines', 'method', 'method.d.ts');
+		const baseline = fs.readFileSync(basePath, 'utf-8');
 
-		const basePath = path.join(__dirname, '..', '..', 'baselines', 'basic.d.ts');
-		const file2 = fs.readFileSync(basePath, 'utf-8');
-
-		assert.strictEqual(file1, file2);
+		assert.strictEqual(result, baseline);
 	});
 });
