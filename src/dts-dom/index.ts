@@ -87,6 +87,11 @@ export interface InterfaceDeclaration extends DeclarationBase {
     baseTypes?: ObjectTypeReference[];
 }
 
+export interface Imports extends DeclarationBase {
+    kind: "imports";
+    members: Import[];
+}
+
 export interface ImportAllDeclaration extends DeclarationBase {
     kind: "importAll";
     name: string;
@@ -248,7 +253,7 @@ export type Import = ImportAllDeclaration | ImportDefaultDeclaration | ImportNam
 
 export type NamespaceMember = InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | NamespaceDeclaration | ConstDeclaration | VariableDeclaration | FunctionDeclaration;
 export type ModuleMember = InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | NamespaceDeclaration | ConstDeclaration | VariableDeclaration | FunctionDeclaration | Import | ExportEqualsDeclaration | ExportDefaultDeclaration;
-export type TopLevelDeclaration = NamespaceMember | ExportEqualsDeclaration | ExportDefaultDeclaration | ExportNameDeclaration | ModuleDeclaration | EnumDeclaration | Import;
+export type TopLevelDeclaration = NamespaceMember | ExportEqualsDeclaration | ExportDefaultDeclaration | ExportNameDeclaration | ModuleDeclaration | EnumDeclaration | Import | Imports;
 
 export enum DeclarationFlags {
     None = 0,
@@ -493,6 +498,13 @@ export const create = {
         return {
             kind: 'import',
             from
+        };
+    },
+
+    imports(imports: Import[]): Imports {
+        return {
+            kind: 'imports',
+            members: imports
         };
     },
 
@@ -1131,6 +1143,23 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
         newline();
     }
 
+    function writeImports(i: Imports) {
+        i.members.forEach(d => {
+            switch (d.kind) {
+                case "importAll":
+                    return writeImportAll(d);
+                case "importDefault":
+                    return writeImportDefault(d);
+                case "importNamed":
+                    return writeImportNamed(d);
+                case "import=":
+                    return writeImportEquals(d);
+                case "import":
+                    return writeImport(d);
+            }
+        });
+    }
+
     function writeImportAll(i: ImportAllDeclaration) {
         start(`import * as ${i.name} from '${i.from}';`);
         newline();
@@ -1142,11 +1171,11 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
     }
 
     function writeImportNamed(i: ImportNamedDeclaration) {
-        start(`import {${i.name}`);
+        start(`import { ${i.name}`);
         if (i.as) {
             print(` as ${i.as}`);
         }
-        print(`} from '${i.from}';`);
+        print(` } from '${i.from}';`);
         newline();
     }
 
@@ -1243,6 +1272,8 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
                     return writeExportName(d);
                 case "module":
                     return writeModule(d);
+                case "imports":
+                    return writeImports(d);
                 case "importAll":
                     return writeImportAll(d);
                 case "importDefault":

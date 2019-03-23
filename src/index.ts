@@ -16,13 +16,11 @@ export interface Options {
 	propTypesComposition?: CompositionType[];
 }
 
-export declare type ImportType = dom.ImportAllDeclaration | dom.ImportDefaultDeclaration | dom.ImportNamedDeclaration;
-
 export function generate(options: Options): string {
 	const content: string = fs.readFileSync(options.input, 'utf8');
 	const componentInfo = DocParser(content);
 	let result: string = '';
-	const importDefinitions: ImportType[] = [];
+	const importDefinitions: dom.Import[] = [];
 
 	if (componentInfo) {
 		const importDefinition = dom.create.importAll('React', 'react');
@@ -76,7 +74,7 @@ export function generate(options: Options): string {
 				});
 			}
 
-			importDefinitions.forEach(item => result += dom.emit(item));
+			result += dom.emit(dom.create.imports(importDefinitions));
 			result += dom.emit(propsDefinition);
 		}
 
