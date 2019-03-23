@@ -17,6 +17,7 @@
     "noUnusedParameters": true,
     "sourceMap": false,
     "outDir": "./bin",
-    "newLine": "LF"
+    "newLine": "LF",
+    "esModuleInterop": true
   }
 }

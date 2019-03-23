@@ -1,7 +1,8 @@
-import * as dom from './dts-dom';
 import * as fs from 'fs';
-import { parse } from 'react-docgen';
-import getType from './getType';
+import { parse as DocParser } from 'react-docgen';
+import CommentParser from 'comment-parser';
+import * as dom from './dts-dom';
+import * as Utils from './utils';
 
 export interface CompositionType {
 	named?: string;
@@ -19,9 +20,10 @@ export declare type ImportType = dom.ImportAllDeclaration | dom.ImportDefaultDec
 
 export function generate(options: Options): string {
 	const content: string = fs.readFileSync(options.input, 'utf8');
-	const componentInfo = parse(content);
+	const componentInfo = DocParser(content);
 	let result: string = '';
 	const importDefinitions: ImportType[] = [];
+
 	if (componentInfo) {
 		const importDefinition = dom.create.importAll('React', 'react');
 		importDefinitions.push(importDefinition);
@@ -50,10 +52,30 @@ export function generate(options: Options): string {
 				keys.forEach(key => {
 					const required = props[key].required;
 					const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
-					const prop = dom.create.property(key, getType(props[key].type.name), flag);
-					propsDefinition.members.push(prop);
+
+					if (Utils.isFuncProp(props[key].type.name)) {
+						const result = CommentParser(Utils.makeComment(props[key].description));
+						if (result && result.length > 0) {
+							const signature = result[0];
+							const parameters: dom.Parameter[] = [];
+							let returnType: dom.Type = dom.type.void;
+
+							signature.tags.forEach(item => {
+								if (item.tag === 'param') {
+									const type = item.type ? item.type : 'any';
+									parameters.push(dom.create.parameter(item.name, Utils.getType(type)));
+								} else if (item.tag === 'return') {
+									returnType = Utils.getType(item.type);
+								}
+							});
+							propsDefinition.members.push(dom.create.method(key, parameters, returnType));
+						}
+					} else {
+						propsDefinition.members.push(dom.create.property(key, Utils.getType(props[key].type.name), flag));
+					}
 				});
 			}
+
 			importDefinitions.forEach(item => result += dom.emit(item));
 			result += dom.emit(propsDefinition);
 		}
@@ -69,11 +91,11 @@ export function generate(options: Options): string {
 				if (params && params.length > 0) {
 					params.forEach(param => {
 						const type = param.type ? param.type.name : 'any';
-						parameters.push(dom.create.parameter(param.name, getType(type)));
+						parameters.push(dom.create.parameter(param.name, Utils.getType(type)));
 					});
 				}
 				const returnType = returns ? returns.type.name : 'any';
-				classDefinition.members.push(dom.create.method(method.name, parameters, getType(returnType)));
+				classDefinition.members.push(dom.create.method(method.name, parameters, Utils.getType(returnType)));
 			});
 		}
 

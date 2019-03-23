@@ -1,6 +1,6 @@
 import * as dom from './dts-dom';
 
-export default (type: string): dom.Type => {
+export function getType(type: string): dom.Type {
 	switch (type.toLowerCase()) {
 		case 'any': return dom.type.any;
 		case 'array': return dom.type.array(dom.type.any);
@@ -10,4 +10,12 @@ export default (type: string): dom.Type => {
 		case 'string': return dom.type.string;
 		default: return dom.type.any;
 	}
-};
+}
+
+export function isFuncProp(type: string): boolean {
+	return type === 'func';
+}
+
+export function makeComment(doc: string): string {
+	return `/**\r\n ${doc} \r\n*/`;
+}

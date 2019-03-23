@@ -6,12 +6,13 @@ declare module "react-docgen" {
 	}
 
 	export interface Props {
-    [key: string]: Prop
+		[key: string]: Prop
 	}
 
 	export interface Prop {
 		required: boolean;
 		type: Type;
+		description: string;
 	}
 
 	export interface Type {
