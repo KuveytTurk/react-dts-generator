@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 declare interface FuncComponentProps {
-    checkResult(stringParam: string): boolean;
+    checkResult?(stringParam: string): boolean;
     onChange(number: number): void;
 }
 

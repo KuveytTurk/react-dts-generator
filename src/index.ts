@@ -66,7 +66,7 @@ export function generate(options: Options): string {
 									returnType = Utils.getType(item.type);
 								}
 							});
-							propsDefinition.members.push(dom.create.method(key, parameters, returnType));
+							propsDefinition.members.push(dom.create.method(key, parameters, returnType, flag));
 						}
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(props[key].type.name), flag));

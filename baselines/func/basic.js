@@ -14,7 +14,7 @@ FuncComponent.propTypes = {
 	/**
 	 * @param {number} number - The param value.
 	 */
-	onChange: PropTypes.func,
+	onChange: PropTypes.func.isRequired,
 
 };
 
