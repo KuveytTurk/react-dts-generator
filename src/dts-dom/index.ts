@@ -77,14 +77,14 @@ export interface ClassDeclaration extends DeclarationBase {
     members: ClassMember[];
     implements: InterfaceDeclaration[];
     typeParameters: TypeParameter[];
-    baseType?: ObjectTypeReference;
+    baseType?: BaseTypeReference;
 }
 
 export interface InterfaceDeclaration extends DeclarationBase {
     kind: "interface";
     name: string;
     members: ObjectTypeMember[];
-    baseTypes?: ObjectTypeReference[];
+    baseTypes: BaseTypeReference[];
 }
 
 export interface Imports extends DeclarationBase {
@@ -244,10 +244,11 @@ export type TripleSlashDirective = TripleSlashReferencePathDirective | TripleSla
 export type TypeReference = TopLevelDeclaration | NamedTypeReference | ArrayTypeReference | PrimitiveType;
 
 export type ObjectTypeReference = ClassDeclaration | InterfaceDeclaration;
+export type BaseTypeReference = ObjectTypeReference | string;
 export type ObjectTypeMember = PropertyDeclaration | MethodDeclaration | IndexSignature | CallSignature;
 export type ClassMember = PropertyDeclaration | MethodDeclaration | IndexSignature | ConstructorDeclaration;
 
-export type Type = TypeReference | UnionType | IntersectionType | PrimitiveType | ObjectType | TypeofReference | FunctionType | TypeParameter | ThisType;
+export type Type = TypeReference | UnionType | IntersectionType | PrimitiveType | ObjectType | TypeofReference | FunctionType | TypeParameter | ThisType | BaseTypeReference;
 
 export type Import = ImportAllDeclaration | ImportDefaultDeclaration | ImportNamedDeclaration | ImportEqualsDeclaration | ImportDeclaration;
 

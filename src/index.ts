@@ -36,11 +36,9 @@ export function generate(options: Options): string {
 				options.propTypesComposition.forEach(x => {
 					if (x.default) {
 						importDefinitions.push(dom.create.importDefault(x.default, x.from));
-						// @ts-ignore
 						propsDefinition.baseTypes.push(x.default);
 					} else if (x.named) {
 						importDefinitions.push(dom.create.importNamed(x.named, x.from));
-						// @ts-ignores
 						propsDefinition.baseTypes.push(x.named);
 					}
 				});
@@ -48,11 +46,11 @@ export function generate(options: Options): string {
 
 			if (keys.length > 0) {
 				keys.forEach(key => {
-					const required = props[key].required;
+					const { required, type, description } = props[key];
 					const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
 
-					if (Utils.isFuncProp(props[key].type.name)) {
-						const result = CommentParser(Utils.makeComment(props[key].description));
+					if (Utils.isFuncProp(type.name)) {
+						const result = CommentParser(Utils.makeComment(description));
 						if (result && result.length > 0) {
 							const signature = result[0];
 							const parameters: dom.Parameter[] = [];
@@ -69,7 +67,7 @@ export function generate(options: Options): string {
 							propsDefinition.members.push(dom.create.method(key, parameters, returnType, flag));
 						}
 					} else {
-						propsDefinition.members.push(dom.create.property(key, Utils.getType(props[key].type.name), flag));
+						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}
 				});
 			}
@@ -79,7 +77,6 @@ export function generate(options: Options): string {
 		}
 
 		const classDefinition = dom.create.class(`${componentInfo.displayName}`, dom.DeclarationFlags.ExportDefault);
-		// @ts-ignore
 		classDefinition.baseType = `React.Component<${componentInfo.displayName}Props>`;
 
 		if (componentInfo.methods) {
