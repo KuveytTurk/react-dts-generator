@@ -8,6 +8,7 @@ declare interface BasicComponentProps {
     stringProp?: string;
     anyProp?: any;
     elementProp?: React.ReactElement<any>;
+    nodeProp?: React.ReactNode;
 }
 
 export default class BasicComponent extends React.Component<BasicComponentProps> {

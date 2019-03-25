@@ -9,6 +9,7 @@ export function getType(type: string): dom.Type {
 		case 'object': return dom.type.object;
 		case 'string': return dom.type.string;
 		case 'element': return 'React.ReactElement<any>';
+		case 'node': return 'React.ReactNode';
 		default: return dom.type.any;
 	}
 }

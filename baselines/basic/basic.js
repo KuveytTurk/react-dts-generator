@@ -13,6 +13,7 @@ BasicComponent.propTypes = {
 	stringProp: PropTypes.string,
 	anyProp: PropTypes.any,
 	elementProp: PropTypes.element,
+	nodeProp: PropTypes.node,
 };
 
 export default BasicComponent;
