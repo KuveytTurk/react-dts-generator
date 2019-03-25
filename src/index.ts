@@ -93,6 +93,14 @@ export function generate(options: Options): string {
 						unions = unions.substr(0, unions.length - 3);
 						propsDefinition.members.push(dom.create.property(key, unions, flag));
 
+					} else if (Utils.isOneOfTypeProp(type.name)) {
+						const unionTypes: dom.Type[] = [];
+						const values = type.value as ValueArray;
+						values.forEach(item => {
+							unionTypes.push(Utils.getType(item.name));
+						});
+						const union = dom.create.union(unionTypes);
+						propsDefinition.members.push(dom.create.property(key, union, flag));
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}

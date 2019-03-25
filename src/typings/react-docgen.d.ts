@@ -22,6 +22,7 @@ declare module "react-docgen" {
 	export interface Value {
 		value: number | string;
 		computed: boolean;
+		name: string;
 	}
 
 	export interface Type {

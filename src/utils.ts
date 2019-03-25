@@ -30,6 +30,10 @@ export function isOneOfProp(type: string): boolean {
 	return type === 'enum';
 }
 
+export function isOneOfTypeProp(type: string): boolean {
+	return type === 'union';
+}
+
 export function makeComment(doc: string): string {
 	return `/**\r\n ${doc} \r\n*/`;
 }
