@@ -1,6 +1,6 @@
 # react-dts-generator 
 
-This module creates typescript definitons for the react components.
+Simple `.d.ts` generator for React components.
 
 ## Installation
 
@@ -38,7 +38,7 @@ The `.d.ts` file that contains typescript definitions. If not specified output f
 
 #### `isBaseClass?: boolean`
 
-If the input component is a base class for another components the typings could be generate with generic prop types like below. Then, another components could pass own props to the base class declaration.
+If the input component is a base class for another component the type definition could be generated with generic prop types like below. Then, another component could pass own props to the base class definition.
 
 
 ```ts
@@ -47,17 +47,17 @@ export default class BaseClass<T = any> extends React.Component<T> {
 
 #### `extends?: { includePropsAsGeneric: boolean, import: ImportType }`
 
-If the input component inherits from another component, base class could be import.
+If the input component inherits from another component, the base class could import from outside.
 
 - ```includePropsAsGeneric: boolean```
-Should the props of the input component pass to the base class?
+Should the props of the input component pass to the base class as generic?
 
 ```ts
 export default class BaseClass<T = any> extends React.Component<T> {
 ```
 
 - ```import: ImportType```
-Indicates that base class import location.
+Indicates where the base class located.
 
 #### `propTypesComposition: ImportType[]`
 
