@@ -35,6 +35,13 @@ class MethodComponent extends React.Component {
 	multiple(first, second) {
 		return [first, second];
 	}
+
+	/**
+	 * @returns {this}
+	 */
+	getInstance() {
+		return this;
+	}
 }
 
 export default MethodComponent;

@@ -8,5 +8,6 @@ export default class MethodComponent extends React.Component<MethodComponentProp
     foo(number: number): number;
     bar(): string;
     multiple(first: number, second: string): any[];
+    getInstance(): this;
 }
 
