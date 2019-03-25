@@ -1064,7 +1064,6 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
         print('): ');
         writeReference(m.returnType);
         print(';');
-        newline();
     }
 
     function writeNamespace(ns: NamespaceDeclaration) {
