@@ -16,6 +16,14 @@ export function isFuncProp(type: string): boolean {
 	return type === 'func';
 }
 
+export function isShapeProp(type: string): boolean {
+	return type === 'shape';
+}
+
 export function makeComment(doc: string): string {
 	return `/**\r\n ${doc} \r\n*/`;
+}
+
+export function getDeclarationName(prop: string): string {
+	return prop.charAt(0).toUpperCase() + prop.slice(1);
 }

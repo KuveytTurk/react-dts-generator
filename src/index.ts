@@ -21,6 +21,7 @@ export function generate(options: Options): string {
 	const componentInfo = DocParser(content);
 	let result: string = '';
 	const importDefinitions: dom.Import[] = [];
+	const interfaceDefinitions: dom.InterfaceDeclaration[] = [];
 
 	if (componentInfo) {
 		const importDefinition = dom.create.importAll('React', 'react');
@@ -66,6 +67,18 @@ export function generate(options: Options): string {
 							});
 							propsDefinition.members.push(dom.create.method(key, parameters, returnType, flag));
 						}
+					} else if (Utils.isShapeProp(type.name)) {
+						const shapeDefinition = dom.create.interface(Utils.getDeclarationName(key));
+						if (type.value && typeof type.value === 'object') {
+							const shapeProp = type.value;
+							Object.keys(shapeProp).forEach(key => {
+								const { required, name } = shapeProp[key];
+								const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+								shapeDefinition.members.push(dom.create.property(key, Utils.getType(name), flag));
+							});
+						}
+						propsDefinition.members.push(dom.create.property(key, Utils.getDeclarationName(key), flag));
+						interfaceDefinitions.push(shapeDefinition);
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}
@@ -73,6 +86,7 @@ export function generate(options: Options): string {
 			}
 
 			result += dom.emit(dom.create.imports(importDefinitions));
+			interfaceDefinitions.forEach(x => result += dom.emit(x));
 			result += dom.emit(propsDefinition);
 		}
 

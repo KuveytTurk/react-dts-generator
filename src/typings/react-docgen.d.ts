@@ -10,6 +10,7 @@ declare module "react-docgen" {
 	}
 
 	export interface Prop {
+		name: string;
 		required: boolean;
 		type: Type;
 		description: string;
@@ -17,6 +18,7 @@ declare module "react-docgen" {
 
 	export interface Type {
 		name: string;
+		value: Props;
 	}
 
 	export interface Method {
