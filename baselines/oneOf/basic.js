@@ -6,8 +6,8 @@ const OneOfComponent = () => {
 };
 
 OneOfComponent.propTypes = {
-	arrayOfString: PropTypes.oneOf(['foo', 'bar']),
-	arrayOfNumber: PropTypes.oneOf([1, 2, 3]).isRequired,
+	oneOfString: PropTypes.oneOf(['foo', 'bar']),
+	oneOfNumber: PropTypes.oneOf([1, 2, 3]).isRequired,
 };
 
 export default OneOfComponent;
