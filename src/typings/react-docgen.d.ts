@@ -1,5 +1,7 @@
 declare module "react-docgen" {
-	export type TypeValue = Props | Prop;
+	export type ValueArray = Value[];
+	export type TypeValue = Props | Prop | ValueArray;
+
 	export interface ComponentInfo {
 		displayName: string;
 		props: Props;
@@ -15,6 +17,11 @@ declare module "react-docgen" {
 		required: boolean;
 		type: Type;
 		description: string;
+	}
+
+	export interface Value {
+		value: number | string;
+		computed: boolean;
 	}
 
 	export interface Type {

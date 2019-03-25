@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { parse as DocParser, Props, Prop } from 'react-docgen';
+import { parse as DocParser, Props, Prop, ValueArray } from 'react-docgen';
 import CommentParser from 'comment-parser';
 import * as dom from './dts-dom';
 import * as Utils from './utils';
@@ -84,6 +84,15 @@ export function generate(options: Options): string {
 						if (arrayValue && typeof arrayValue === 'object') {
 							propsDefinition.members.push(dom.create.property(key, dom.type.array(Utils.getType(arrayValue.name)), flag));
 						}
+					} else if (Utils.isOneOfProp(type.name)) {
+						const values = type.value as ValueArray;
+						let unions = '';
+						values.forEach(item => {
+							unions += `${item.value as string} | `;
+						});
+						unions = unions.substr(0, unions.length - 3);
+						propsDefinition.members.push(dom.create.property(key, unions, flag));
+
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}
