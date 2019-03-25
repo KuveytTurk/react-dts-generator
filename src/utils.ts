@@ -20,6 +20,10 @@ export function isShapeProp(type: string): boolean {
 	return type === 'shape';
 }
 
+export function isArrayOfProp(type: string): boolean {
+	return type === 'arrayOf';
+}
+
 export function makeComment(doc: string): string {
 	return `/**\r\n ${doc} \r\n*/`;
 }

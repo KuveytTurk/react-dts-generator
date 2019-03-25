@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { parse as DocParser } from 'react-docgen';
+import { parse as DocParser, Props, Prop } from 'react-docgen';
 import CommentParser from 'comment-parser';
 import * as dom from './dts-dom';
 import * as Utils from './utils';
@@ -70,7 +70,7 @@ export function generate(options: Options): string {
 					} else if (Utils.isShapeProp(type.name)) {
 						const shapeDefinition = dom.create.interface(Utils.getDeclarationName(key));
 						if (type.value && typeof type.value === 'object') {
-							const shapeProp = type.value;
+							const shapeProp = type.value as Props;
 							Object.keys(shapeProp).forEach(key => {
 								const { required, name } = shapeProp[key];
 								const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
@@ -79,6 +79,11 @@ export function generate(options: Options): string {
 						}
 						propsDefinition.members.push(dom.create.property(key, Utils.getDeclarationName(key), flag));
 						interfaceDefinitions.push(shapeDefinition);
+					} else if (Utils.isArrayOfProp(type.name)) {
+						const arrayValue = type.value as Prop;
+						if (arrayValue && typeof arrayValue === 'object') {
+							propsDefinition.members.push(dom.create.property(key, dom.type.array(Utils.getType(arrayValue.name)), flag));
+						}
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}

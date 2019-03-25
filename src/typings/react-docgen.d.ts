@@ -1,4 +1,5 @@
 declare module "react-docgen" {
+	export type TypeValue = Props | Prop;
 	export interface ComponentInfo {
 		displayName: string;
 		props: Props;
@@ -18,7 +19,7 @@ declare module "react-docgen" {
 
 	export interface Type {
 		name: string;
-		value: Props;
+		value: TypeValue;
 	}
 
 	export interface Method {
