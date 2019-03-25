@@ -35,7 +35,31 @@ The `.js` file that contains React Component. `react-dts-generator` use the [`re
 
 The `.d.ts` file that contains typescript definitions. If not specified output file will be exported to the same location of the input file.
 
-#### `propTypesComposition: array`
+
+#### `isBaseClass?: boolean`
+
+If the input component is a base class for another components the typings could be generate with generic prop types like below. Then, another components could pass own props to the base class declaration.
+
+
+```ts
+export default class BaseClass<T = any> extends React.Component<T> {
+```
+
+#### `extends?: Extends`
+
+If the input component inherits from another component, base class could be import.
+
+##### ```includePropsAsGeneric: boolean```
+Should the props of the input component pass to the base class?
+
+```ts
+export default class BaseClass<T = any> extends React.Component<T> {
+```
+
+##### ```importType: ImportType```
+Indicates that base class import location.
+
+#### `propTypesComposition: ImportType[]`
 
 If the component propTypes has composes by another component's propTypes, and typescript definitions of the other component were already generated they could be imported and generated types extend from them.
 
