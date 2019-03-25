@@ -4,7 +4,7 @@ import CommentParser from 'comment-parser';
 import * as dom from './dts-dom';
 import * as Utils from './utils';
 
-export interface CompositionType {
+export interface ImportType {
 	named?: string;
 	default?: string;
 	from: string;
@@ -13,13 +13,15 @@ export interface CompositionType {
 export interface Options {
 	input: string;
 	output: string;
-	propTypesComposition?: CompositionType[];
+	propTypesComposition?: ImportType[];
 }
 
 export function generate(options: Options): string {
+	let result: string = '';
+
 	const content: string = fs.readFileSync(options.input, 'utf8');
 	const componentInfo = DocParser(content);
-	let result: string = '';
+
 	const importDefinitions: dom.Import[] = [];
 	const interfaceDefinitions: dom.InterfaceDeclaration[] = [];
 
@@ -107,9 +109,7 @@ export function generate(options: Options): string {
 				});
 			}
 
-			result += dom.emit(dom.create.imports(importDefinitions));
-			interfaceDefinitions.forEach(x => result += dom.emit(x));
-			result += dom.emit(propsDefinition);
+			interfaceDefinitions.push(propsDefinition);
 		}
 
 		const classDefinition = dom.create.class(`${componentInfo.displayName}`, dom.DeclarationFlags.ExportDefault);
@@ -130,7 +130,10 @@ export function generate(options: Options): string {
 			});
 		}
 
+		result += dom.emit(dom.create.imports(importDefinitions));
+		interfaceDefinitions.forEach(x => result += dom.emit(x));
 		result += dom.emit(classDefinition);
+
 		if (result) {
 			const fileName = options.output || options.input.split('.')[0] + '.d.ts';
 			fs.writeFileSync(
