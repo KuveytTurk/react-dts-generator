@@ -53,7 +53,7 @@ If the input component inherits from another component, the base class could imp
 Should the props of the input component pass to the base class as generic?
 
 ```ts
-export default class BaseClass<T = any> extends React.Component<T> {
+export default class TestClass extends BaseClass<TestClassProps> {
 ```
 
 - ```import: ImportType```
