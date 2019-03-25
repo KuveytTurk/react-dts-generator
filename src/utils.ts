@@ -42,3 +42,7 @@ export function makeComment(doc: string): string {
 export function getDeclarationName(prop: string): string {
 	return prop.charAt(0).toUpperCase() + prop.slice(1);
 }
+
+export function writeGeneric(out: string, type: string): string {
+	return `${out}<${type}>`;
+}

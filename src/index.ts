@@ -10,14 +10,22 @@ export interface ImportType {
 	from: string;
 }
 
+export interface Extends {
+	includePropsAsGeneric?: boolean;
+	import: ImportType;
+}
+
 export interface Options {
 	input: string;
 	output: string;
+	isBaseClass?: boolean;
 	propTypesComposition?: ImportType[];
+	extends?: Extends;
 }
 
 export function generate(options: Options): string {
 	let result: string = '';
+	let baseType: string = 'React.Component';
 
 	const content: string = fs.readFileSync(options.input, 'utf8');
 	const componentInfo = DocParser(content);
@@ -32,7 +40,8 @@ export function generate(options: Options): string {
 		if (componentInfo.props) {
 			const props = componentInfo.props;
 			const keys = Object.keys(props);
-			const propsDefinition = dom.create.interface(`${componentInfo.displayName}Props`);
+			const propsIntefaceName = `${componentInfo.displayName}Props`;
+			const propsDefinition = dom.create.interface(propsIntefaceName);
 
 			if (options.propTypesComposition && options.propTypesComposition.length > 0) {
 				propsDefinition.baseTypes = [];
@@ -109,11 +118,31 @@ export function generate(options: Options): string {
 				});
 			}
 
+			baseType = Utils.writeGeneric('React.Component', options.isBaseClass ? 'T' : propsIntefaceName);
 			interfaceDefinitions.push(propsDefinition);
 		}
 
-		const classDefinition = dom.create.class(`${componentInfo.displayName}`, dom.DeclarationFlags.ExportDefault);
-		classDefinition.baseType = `React.Component<${componentInfo.displayName}Props>`;
+		const className = options.isBaseClass
+			? Utils.writeGeneric(`${componentInfo.displayName}`, 'T = any')
+			: `${componentInfo.displayName}`;
+
+		const classDefinition = dom.create.class(className, dom.DeclarationFlags.ExportDefault);
+
+		if (options.extends) {
+			if (options.extends.import.default) {
+				importDefinitions.push(dom.create.importDefault(options.extends.import.default, options.extends.import.from));
+				baseType = options.extends.includePropsAsGeneric
+					? Utils.writeGeneric(options.extends.import.default, `${componentInfo.displayName}Props`)
+					: options.extends.import.default;
+			} else if (options.extends.import.named) {
+				importDefinitions.push(dom.create.importDefault(options.extends.import.named, options.extends.import.from));
+				baseType = options.extends.includePropsAsGeneric
+					? Utils.writeGeneric(options.extends.import.named, `${componentInfo.displayName}Props`)
+					: options.extends.import.named;
+			}
+		}
+
+		classDefinition.baseType = baseType;
 
 		if (componentInfo.methods) {
 			componentInfo.methods.forEach(method => {
