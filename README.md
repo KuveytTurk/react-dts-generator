@@ -6,8 +6,8 @@ This module creates typescript definitons for the react components.
 
 ```sh
 ## npm
-npm install react-dts-generator --save
-##yarn
+npm install react-dts-generator
+## yarn
 yarn add react-dts-generator
 ```
 
