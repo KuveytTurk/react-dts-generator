@@ -16,7 +16,7 @@ yarn add react-dts-generator
 
 ```js
 import { generate } from 'react-dts-generator';
-const string = generate(options);
+const result = generate(options);
 ```
 
 ### Options
@@ -54,3 +54,15 @@ If the component propTypes has composes by another component's propTypes, and ty
 
 		});
 ```
+
+
+### Known Issues
+
+- These propTypes generated as `any`
+	-	`PropTypes.symbol`
+	-	`PropTypes.elementType`
+	-	`PropTypes.instanceOf` 
+	-	`PropTypes.objectOf` 
+	-	`PropTypes.exact`
+
+- Custom propTypes is not supported.
