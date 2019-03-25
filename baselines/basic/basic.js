@@ -12,6 +12,7 @@ BasicComponent.propTypes = {
 	objectProp: PropTypes.object,
 	stringProp: PropTypes.string,
 	anyProp: PropTypes.any,
+	elementProp: PropTypes.element,
 };
 
 export default BasicComponent;
