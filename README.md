@@ -45,18 +45,18 @@ If the input component is a base class for another components the typings could 
 export default class BaseClass<T = any> extends React.Component<T> {
 ```
 
-#### `extends?: Extends`
+#### `extends?: { includePropsAsGeneric: boolean, import: ImportType }`
 
 If the input component inherits from another component, base class could be import.
 
-##### ```includePropsAsGeneric: boolean```
+- ```includePropsAsGeneric: boolean```
 Should the props of the input component pass to the base class?
 
 ```ts
 export default class BaseClass<T = any> extends React.Component<T> {
 ```
 
-##### ```importType: ImportType```
+- ```import: ImportType```
 Indicates that base class import location.
 
 #### `propTypesComposition: ImportType[]`
