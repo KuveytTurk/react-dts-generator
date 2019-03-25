@@ -135,7 +135,7 @@ export function generate(options: Options): string {
 					? Utils.writeGeneric(options.extends.import.default, `${componentInfo.displayName}Props`)
 					: options.extends.import.default;
 			} else if (options.extends.import.named) {
-				importDefinitions.push(dom.create.importDefault(options.extends.import.named, options.extends.import.from));
+				importDefinitions.push(dom.create.importNamed(options.extends.import.named, options.extends.import.from));
 				baseType = options.extends.includePropsAsGeneric
 					? Utils.writeGeneric(options.extends.import.named, `${componentInfo.displayName}Props`)
 					: options.extends.import.named;
