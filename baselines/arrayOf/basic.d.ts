@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare interface ArrayOfComponentProps {
+export interface ArrayOfComponentProps {
     arrayOfString?: string[];
     arrayOfNumber: number[];
 }

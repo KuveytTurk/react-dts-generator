@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare interface OneOfTypeComponentProps {
+export interface OneOfTypeComponentProps {
     oneOfStringOrNumber?: string | number;
     oneOfBoolOrObject: boolean | object;
 }

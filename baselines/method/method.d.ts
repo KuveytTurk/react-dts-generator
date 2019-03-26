@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare interface MethodComponentProps {
+export interface MethodComponentProps {
     temp?: any;
 }
 

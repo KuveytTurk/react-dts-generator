@@ -36,7 +36,7 @@ export function generate(options: Options): string {
 
 	if (componentInfo) {
 		const propsIntefaceName = `${componentInfo.displayName}Props`;
-		const propsDefinition = dom.create.interface(propsIntefaceName);
+		const propsDefinition = dom.create.interface(propsIntefaceName, dom.DeclarationFlags.Export);
 		const importDefinition = dom.create.importAll('React', 'react');
 		importDefinitions.push(importDefinition);
 

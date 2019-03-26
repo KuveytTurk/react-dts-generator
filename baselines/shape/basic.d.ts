@@ -10,7 +10,7 @@ declare interface Second {
     bar?: boolean;
 }
 
-declare interface ShapeComponentProps {
+export interface ShapeComponentProps {
     first: First;
     second?: Second;
 }

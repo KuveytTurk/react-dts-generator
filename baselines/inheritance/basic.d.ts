@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseClass from './base';
 
-declare interface TestClassProps {
+export interface TestClassProps {
     foo?: any;
 }
 

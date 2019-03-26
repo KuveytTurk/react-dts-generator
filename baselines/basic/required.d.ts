@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare interface RequiredComponentProps {
+export interface RequiredComponentProps {
     requiredProp: string;
     numberProp?: number;
 }

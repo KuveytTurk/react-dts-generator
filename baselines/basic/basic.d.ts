@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare interface BasicComponentProps {
+export interface BasicComponentProps {
     arrayProp?: any[];
     boolProp?: boolean;
     numberProp?: number;
