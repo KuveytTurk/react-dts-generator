@@ -1,7 +1,6 @@
 {
   "include": [
     "src",
-    "test",
     "baselines"
   ],
   "compilerOptions": {
@@ -19,6 +18,7 @@
     "sourceMap": false,
     "outDir": "./bin",
     "newLine": "LF",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declaration": true
   }
 }

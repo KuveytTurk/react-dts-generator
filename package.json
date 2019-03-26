@@ -2,7 +2,8 @@
 	"name": "react-dts-generator",
 	"version": "1.0.0",
 	"description": "",
-	"main": "./bin/src/index.js",
+	"main": "./bin/index.js",
+	"types": "./bin/index.d.ts",
 	"scripts": {
 		"test": "mocha bin/test/*.js",
 		"build": "rimraf bin && tsc",
