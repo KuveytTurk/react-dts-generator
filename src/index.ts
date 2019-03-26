@@ -21,6 +21,7 @@ export interface Options {
 	isBaseClass?: boolean;
 	propTypesComposition?: ImportType[];
 	extends?: Extends;
+	imports?: ImportType[];
 }
 
 export function generate(options: Options): string {
@@ -34,25 +35,26 @@ export function generate(options: Options): string {
 	const interfaceDefinitions: dom.InterfaceDeclaration[] = [];
 
 	if (componentInfo) {
+		const propsIntefaceName = `${componentInfo.displayName}Props`;
+		const propsDefinition = dom.create.interface(propsIntefaceName);
 		const importDefinition = dom.create.importAll('React', 'react');
 		importDefinitions.push(importDefinition);
 
 		if (componentInfo.props) {
 			const props = componentInfo.props;
 			const keys = Object.keys(props);
-			const propsIntefaceName = `${componentInfo.displayName}Props`;
-			const propsDefinition = dom.create.interface(propsIntefaceName);
 
 			if (options.propTypesComposition && options.propTypesComposition.length > 0) {
 				propsDefinition.baseTypes = [];
 				options.propTypesComposition.forEach(x => {
-					if (x.default) {
-						importDefinitions.push(dom.create.importDefault(x.default, x.from));
-						propsDefinition.baseTypes.push(x.default);
-					} else if (x.named) {
-						importDefinitions.push(dom.create.importNamed(x.named, x.from));
-						propsDefinition.baseTypes.push(x.named);
-					}
+					importDefinitions.push(Utils.createImport(x.from, x.default, x.named));
+					propsDefinition.baseTypes.push(x.default as string || x.named as string);
+				});
+			}
+
+			if (options.imports && options.imports.length > 0) {
+				options.imports.forEach(x => {
+					importDefinitions.push(Utils.createImport(x.from, x.default, x.named));
 				});
 			}
 
@@ -60,6 +62,10 @@ export function generate(options: Options): string {
 				keys.forEach(key => {
 					const { required, type, description } = props[key];
 					const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+
+					if (!type) {
+						return;
+					}
 
 					if (Utils.isFuncProp(type.name)) {
 						const result = CommentParser(Utils.makeComment(description));
@@ -122,23 +128,18 @@ export function generate(options: Options): string {
 			interfaceDefinitions.push(propsDefinition);
 		}
 
-		const className = options.isBaseClass
-			? Utils.writeGeneric(`${componentInfo.displayName}`, 'T = any')
-			: `${componentInfo.displayName}`;
+		const { isBaseClass } = options;
+		const className = isBaseClass ? Utils.writeGeneric(componentInfo.displayName, 'T = any') : componentInfo.displayName;
 
 		const classDefinition = dom.create.class(className, dom.DeclarationFlags.ExportDefault);
 
 		if (options.extends) {
-			if (options.extends.import.default) {
-				importDefinitions.push(dom.create.importDefault(options.extends.import.default, options.extends.import.from));
-				baseType = options.extends.includePropsAsGeneric
-					? Utils.writeGeneric(options.extends.import.default, `${componentInfo.displayName}Props`)
-					: options.extends.import.default;
-			} else if (options.extends.import.named) {
-				importDefinitions.push(dom.create.importNamed(options.extends.import.named, options.extends.import.from));
-				baseType = options.extends.includePropsAsGeneric
-					? Utils.writeGeneric(options.extends.import.named, `${componentInfo.displayName}Props`)
-					: options.extends.import.named;
+			if (options.extends.import) {
+				const { from, named } = options.extends.import;
+				importDefinitions.push(Utils.createImport(from, options.extends.import.default, named));
+				const baseTypeName = named as string || options.extends.import.default as string;
+				const genericName = isBaseClass ? 'T' : propsIntefaceName;
+				baseType = Utils.writeGeneric(baseTypeName, genericName);
 			}
 		}
 

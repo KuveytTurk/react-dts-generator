@@ -46,3 +46,12 @@ export function getDeclarationName(prop: string): string {
 export function writeGeneric(out: string, type: string): string {
 	return `${out}<${type}>`;
 }
+
+export function createImport(from: string, defaultImport?: string, namedImport?: string): dom.Import {
+	if (defaultImport) {
+		return dom.create.importDefault(defaultImport, from);
+	} else if (namedImport) {
+		return dom.create.importNamed(namedImport, from);
+	}
+	return dom.create.import(from);
+}
