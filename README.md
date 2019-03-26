@@ -52,12 +52,19 @@ If the input component inherits from another component, the base class could imp
 - ```includePropsAsGeneric: boolean```
 Should the props of the input component pass to the base class as generic?
 
-```ts
-export default class TestClass extends BaseClass<TestClassProps> {
-```
-
 - ```import: ImportType```
 Indicates where the base class located.
+
+
+```ts
+import BaseClass from "./base";
+
+export interface TestClassProps {
+  foo?: any;
+}
+
+export default class TestClass extends BaseClass<TestClassProps> {}
+```
 
 #### `propTypesComposition: ImportType[]`
 
