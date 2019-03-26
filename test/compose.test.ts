@@ -37,11 +37,11 @@ describe('Compose test', () => {
 			output: path.join(__dirname, 'tmp', 'compose', 'multiple.d.ts'),
 			propTypesComposition: [{
 				named: 'BasicComponentProps',
-				from: '../basic/basic',
+				from: '../basic',
 			},
 			{
 				named: 'RequiredComponentProps',
-				from: '../basic/required',
+				from: '../basic',
 			}],
 		});
 

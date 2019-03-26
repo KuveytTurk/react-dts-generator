@@ -502,7 +502,7 @@ export const create = {
         };
     },
 
-    imports(imports: Import[]): Imports {
+    imports(imports: Import[]): Imports {
         return {
             kind: 'imports',
             members: imports
@@ -1143,21 +1143,47 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
         newline();
     }
 
+    function groupBy(xs: any[], key: string): any {
+        return xs.reduce(function (rv, x) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+            return rv;
+        }, {});
+    };
+
     function writeImports(i: Imports) {
-        i.members.forEach(d => {
-            switch (d.kind) {
-                case "importAll":
-                    return writeImportAll(d);
-                case "importDefault":
-                    return writeImportDefault(d);
-                case "importNamed":
-                    return writeImportNamed(d);
-                case "import=":
-                    return writeImportEquals(d);
-                case "import":
-                    return writeImport(d);
+        const groups = groupBy(i.members, 'from');
+
+        Object.keys(groups).forEach(key => {
+            const groupedImports = groups[key] as Import[];
+            const namedImports: ImportNamedDeclaration[] = [];
+            let defaultImport: ImportDefaultDeclaration | undefined;
+            let importAll: ImportAllDeclaration | undefined;
+
+            groupedImports.forEach(i => {
+                if (i.kind === 'importNamed') {
+                    const tmp = i as ImportNamedDeclaration;
+                    const named = namedImports.find(x => x.name === tmp.name);
+                    if (!named) {
+                        namedImports.push(tmp);
+                    }
+                } else if (i.kind === 'importDefault' && !defaultImport) {
+                    defaultImport = i as ImportDefaultDeclaration;
+                } else if (i.kind === 'importAll') {
+                    importAll = i as ImportAllDeclaration;
+                }
+            });
+
+            if (importAll) {
+                writeImportAll(importAll);
+            } else if (defaultImport && namedImports.length > 0) {
+                writeNamedImportsWithDefault(namedImports, defaultImport);
+            } else if (defaultImport) {
+                writeImportDefault(defaultImport);
+            } else {
+                writeNamedImports(namedImports);
             }
         });
+
     }
 
     function writeImportAll(i: ImportAllDeclaration) {
@@ -1178,6 +1204,26 @@ export function emit(rootDecl: TopLevelDeclaration, { rootFlags = ContextFlags.N
         print(` } from '${i.from}';`);
         newline();
     }
+
+
+    function writeNamedImports(i: ImportNamedDeclaration[]) {
+        let namedImports: string = '';
+        i.forEach(x => namedImports += `${x.name}, `);
+        namedImports = namedImports.slice(0, -2);
+        start(`import { ${namedImports}`);
+        print(` } from '${i[0].from}';`);
+        newline();
+    }
+
+    function writeNamedImportsWithDefault(i: ImportNamedDeclaration[], d: ImportDefaultDeclaration) {
+        let namedImports: string = '';
+        i.forEach(x => namedImports += `${x.name}, `);
+        namedImports = namedImports.slice(0, -2);
+        start(`import ${d.name}, { ${namedImports}`);
+        print(` } from '${d.from}';`);
+        newline();
+    }
+
 
     function writeImportEquals(i: ImportEqualsDeclaration) {
         start(`import ${i.name} = require('${i.from}');`);

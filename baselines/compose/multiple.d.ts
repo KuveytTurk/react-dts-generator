@@ -1,6 +1,5 @@
 import * as React from "react";
-import { BasicComponentProps } from "../basic/basic";
-import { RequiredComponentProps } from "../basic/required";
+import { BasicComponentProps, RequiredComponentProps } from "../basic";
 
 export interface ComposedComponentProps
   extends BasicComponentProps,
