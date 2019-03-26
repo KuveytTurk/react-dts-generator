@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "mocha bin/test/*.js",
 		"build": "rimraf bin && tsc",
-		"lint": "tslint -p tsconfig.json --format stylish",
-		"lint:fix": "tslint -p tsconfig.json --format stylish --fix"
+		"lint": "tslint -p tsconfig.json \"./{src,baselines}/**/*.{ts,tsx}\"",
+		"lint:fix": "tslint -p tsconfig.json \"./{src,baselines}/**/*.{ts,tsx}\" --fix "
 	},
 	"author": "",
 	"license": "Apache-2.0",
@@ -32,6 +32,7 @@
 		"@types/mocha": "^5.2.6",
 		"@types/node": "^11.11.4",
 		"@types/parse-git-config": "^3.0.0",
+		"@types/prettier": "^1.16.1",
 		"@types/prop-types": "^15.7.0",
 		"@types/react": "^16.8.8",
 		"@types/yargs": "^12.0.10",
@@ -43,6 +44,7 @@
 		"prop-types": "^15.7.2",
 		"react": "^16.8.3",
 		"rimraf": "^2.6.3",
-		"tslint": "^5.14.0"
+		"tslint": "^5.14.0",
+		"tslint-config-prettier": "^1.18.0"
 	}
 }

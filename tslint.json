@@ -1,14 +1,9 @@
 {
-  "extends": "tslint:latest",
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
   "rules": {
-    "arrow-parens": [
-      true,
-      "ban-single-arg-parens"
-    ],
-    "indent": [
-      true,
-      "tabs"
-    ],
     "interface-name": [
       true,
       "never-prefix"
@@ -17,25 +12,17 @@
       true,
       "no-public"
     ],
-    "ban-types": false,
-    "curly": false,
-    "member-ordering": false,
     "no-angle-bracket-type-assertion": false,
-    "no-bitwise": false,
-    "no-console": false,
-    "no-empty": false,
-    "no-eval": false,
     "no-shadowed-variable": false,
-    "no-var-requires": false,
-    "object-literal-sort-keys": false,
-    "quotemark": false,
-		"variable-name": false,
-		"no-implicit-dependencies": false,
-		"ordered-imports": false
-	},
-	"linterOptions": {
-		"exclude": [
-			"src/dts-dom/*"
-		]
-	}
+    "variable-name": false,
+    "no-implicit-dependencies": false,
+    "ordered-imports": false,
+    "no-submodule-imports": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "src/dts-dom/*",
+      "src/typings/*"
+    ]
+  }
 }

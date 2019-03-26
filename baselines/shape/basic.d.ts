@@ -1,20 +1,20 @@
-import * as React from 'react';
+import * as React from "react";
 
 declare interface First {
-    foo?: number;
-    bar?: string;
+  foo?: number;
+  bar?: string;
 }
 
 declare interface Second {
-    foo?: object;
-    bar?: boolean;
+  foo?: object;
+  bar?: boolean;
 }
 
 export interface ShapeComponentProps {
-    first: First;
-    second?: Second;
+  first: First;
+  second?: Second;
 }
 
-export default class ShapeComponent extends React.Component<ShapeComponentProps> {
-}
-
+export default class ShapeComponent extends React.Component<
+  ShapeComponentProps
+> {}

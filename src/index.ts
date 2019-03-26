@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as prettier from 'prettier';
 import { parse as DocParser, Props, Prop, ValueArray } from 'react-docgen';
 import CommentParser from 'comment-parser';
 import * as dom from './dts-dom';
@@ -171,13 +172,15 @@ export function generate(options: Options): string {
 
 		if (result) {
 			const fileName = options.output || options.input.split('.')[0] + '.d.ts';
-			fs.writeFileSync(
-				fileName,
-				result,
-				{ flag: 'w', encoding: 'utf8' },
-			);
+			// const tslintOptions = { fix: true };
+			// const linter = new Linter(tslintOptions);
+			// const configuration = Configuration.findConfiguration(path.join(__dirname, '..', '..', 'tslint.json').toString()).results;
+
+			result = prettier.format(result, { parser: 'typescript' });
+			fs.writeFileSync(fileName, result, { flag: 'w', encoding: 'utf8' });
+			return result;
 		}
 	}
 
-	return result;
+	return '';
 }

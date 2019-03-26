@@ -1,10 +1,8 @@
-import * as React from 'react';
-import BaseClass from './base';
+import * as React from "react";
+import BaseClass from "./base";
 
 export interface TestClassProps {
-    foo?: any;
+  foo?: any;
 }
 
-export default class TestClass extends BaseClass<TestClassProps> {
-}
-
+export default class TestClass extends BaseClass<TestClassProps> {}
