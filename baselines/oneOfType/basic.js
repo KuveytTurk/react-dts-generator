@@ -7,6 +7,7 @@ const OneOfTypeComponent = () => {
 
 OneOfTypeComponent.propTypes = {
 	oneOfStringOrNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	anyType: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
 	oneOfBoolOrObject: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
 };
 

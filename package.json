@@ -5,7 +5,7 @@
 	"main": "./bin/src/index.js",
 	"scripts": {
 		"test": "mocha bin/test/*.js",
-		"build": "tsc",
+		"build": "rimraf bin && tsc",
 		"lint": "tslint -p tsconfig.json --format stylish",
 		"lint:fix": "tslint -p tsconfig.json --format stylish --fix"
 	},

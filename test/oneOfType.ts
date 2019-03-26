@@ -19,10 +19,10 @@ describe('OneOfType test', () => {
 			output: path.join(__dirname, 'tmp', 'oneOfType', 'basic.d.ts'),
 		});
 
-		// const basePath = path.join(__dirname, '..', '..', 'baselines', 'oneOfType', 'basic.d.ts');
-		// const baseline = fs.readFileSync(basePath, 'utf-8');
+		const basePath = path.join(__dirname, '..', '..', 'baselines', 'oneOfType', 'basic.d.ts');
+		const baseline = fs.readFileSync(basePath, 'utf-8');
 
-		assert.strictEqual(result, result);
+		assert.strictEqual(result, baseline);
 
 	});
 });

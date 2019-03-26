@@ -111,13 +111,18 @@ export function generate(options: Options): string {
 						propsDefinition.members.push(dom.create.property(key, unions, flag));
 
 					} else if (Utils.isOneOfTypeProp(type.name)) {
+						let isAnyType: boolean = false;
 						const unionTypes: dom.Type[] = [];
 						const values = type.value as ValueArray;
 						values.forEach(item => {
+							const t = Utils.getType(item.name);
+							if (t === dom.type.any) {
+								isAnyType = true;
+							}
 							unionTypes.push(Utils.getType(item.name));
 						});
 						const union = dom.create.union(unionTypes);
-						propsDefinition.members.push(dom.create.property(key, union, flag));
+						propsDefinition.members.push(dom.create.property(key, isAnyType ? dom.type.any : union, flag));
 					} else {
 						propsDefinition.members.push(dom.create.property(key, Utils.getType(type.name), flag));
 					}
