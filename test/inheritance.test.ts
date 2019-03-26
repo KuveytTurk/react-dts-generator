@@ -16,8 +16,8 @@ describe('Inheritance test', () => {
 	it('should create base type', () => {
 		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'inheritance', 'base.js'),
-			output: path.join(__dirname, 'tmp', 'inheritance', 'base.d.ts'),
 			isBaseClass: true,
+			output: path.join(__dirname, 'tmp', 'inheritance', 'base.d.ts'),
 		});
 
 		const basePath = path.join(__dirname, '..', '..', 'baselines', 'inheritance', 'base.d.ts');
@@ -28,15 +28,15 @@ describe('Inheritance test', () => {
 
 	it('should create with inheritance', () => {
 		const result = generate({
+			extends: {
+				import: {
+					default: 'BaseClass',
+					from: './base',
+				},
+				includePropsAsGeneric: true,
+			},
 			input: path.join(__dirname, '..', '..', 'baselines', 'inheritance', 'basic.js'),
 			output: path.join(__dirname, 'tmp', 'inheritance', 'basic.d.ts'),
-			extends: {
-				includePropsAsGeneric: true,
-				import: {
-					from: './base',
-					default: 'BaseClass',
-				},
-			},
 		});
 
 		const basePath = path.join(__dirname, '..', '..', 'baselines', 'inheritance', 'basic.d.ts');

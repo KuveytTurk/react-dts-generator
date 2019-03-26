@@ -19,8 +19,8 @@ describe('Compose test', () => {
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'single.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'single.d.ts'),
 			propTypesComposition: [{
-				named: 'BasicComponentProps',
 				from: '../basic/basic',
+				named: 'BasicComponentProps',
 			}],
 		});
 
@@ -36,12 +36,12 @@ describe('Compose test', () => {
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'multiple.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'multiple.d.ts'),
 			propTypesComposition: [{
-				named: 'BasicComponentProps',
 				from: '../basic',
+				named: 'BasicComponentProps',
 			},
 			{
-				named: 'RequiredComponentProps',
 				from: '../basic',
+				named: 'RequiredComponentProps',
 			}],
 		});
 
@@ -56,12 +56,12 @@ describe('Compose test', () => {
 			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'module.js'),
 			output: path.join(__dirname, 'tmp', 'compose', 'module.d.ts'),
 			propTypesComposition: [{
-				named: 'BasicComponentProps',
 				from: '../basic/basic',
+				named: 'BasicComponentProps',
 			},
 			{
-				named: 'ComponentBaseProps',
 				from: '@kuveytturk/boa-base/ComponentBase',
+				named: 'ComponentBaseProps',
 			}],
 
 		});
