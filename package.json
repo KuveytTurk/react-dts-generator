@@ -6,6 +6,20 @@
 	"version": "0.1.0",
 	"main": "./bin/index.js",
 	"types": "./bin/index.d.ts",
+	"keywords": [
+		"react",
+		"typescript",
+		"dts",
+		"definitelytyped",
+		"typings"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/KuveytTurk/react-dts-generator.git"
+	},
+	"bugs": {
+		"url": "https://github.com/KuveytTurk/react-dts-generator/issues"
+	},
 	"scripts": {
 		"test": "mocha bin/test/*.js",
 		"build": "rimraf bin && tsc",
