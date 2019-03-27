@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"comment-parser": "^0.5.4",
+		"prettier": "^1.16.4",
 		"react-docgen": "^4.0.1",
 		"typescript": "^3.3.4000"
 	},
@@ -41,7 +42,6 @@
 		"cross-env": "^5.2.0",
 		"diff": "^4.0.1",
 		"mocha": "^6.0.2",
-		"prettier": "^1.16.4",
 		"prop-types": "^15.7.2",
 		"react": "^16.8.3",
 		"rimraf": "^2.6.3",
