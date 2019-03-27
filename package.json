@@ -1,7 +1,9 @@
 {
+	"author": "Kuveyt Turk BOA One Team",
+	"description": "Simple .d.ts generator for React components.",
+	"license": "Apache-2.0",
 	"name": "react-dts-generator",
-	"version": "1.0.0",
-	"description": "",
+	"version": "0.1.0",
 	"main": "./bin/index.js",
 	"types": "./bin/index.d.ts",
 	"scripts": {
@@ -10,8 +12,6 @@
 		"lint": "tslint -p tsconfig.json \"./{src,baselines,test}/**/*.{ts,tsx}\"",
 		"lint:fix": "tslint -p tsconfig.json \"./{src,baselines,test}/**/*.{ts,tsx}\" --fix "
 	},
-	"author": "",
-	"license": "Apache-2.0",
 	"dependencies": {
 		"comment-parser": "^0.5.4",
 		"react-docgen": "^4.0.1",

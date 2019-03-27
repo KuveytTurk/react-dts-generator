@@ -88,7 +88,7 @@ If the component propTypes has composes by another component's propTypes, and ty
 
 ### Samples
 
-Checkout the [baselines](https://github.com/KuveytTurk/react-dts-generator/tree/master/baselines).
+Checkout the [baselines](https://github.com/KuveytTurk/react-dts-generator/tree/master/baselines) and [tests](https://github.com/KuveytTurk/react-dts-generator/tree/master/test).
 
 
 
