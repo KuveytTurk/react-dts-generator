@@ -1,7 +1,7 @@
 {
   "include": [
     "src",
-    "baselines"
+    "test"
   ],
   "compilerOptions": {
     "lib": [

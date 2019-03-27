@@ -4,10 +4,10 @@
 	"license": "Apache-2.0",
 	"name": "react-dts-generator",
 	"version": "0.1.0",
-	"main": "./bin/index.js",
-	"types": "./bin/index.d.ts",
+	"main": "./bin/src/index.js",
+	"types": "./bin/src/index.d.ts",
 	"files": [
-		"bin/**/*.*"
+		"bin/src/**/*.*"
 	],
 	"keywords": [
 		"react",
