@@ -17,10 +17,11 @@ declare module "react-docgen" {
 		required: boolean;
 		type: Type;
 		description: string;
+		value: Value | Props
 	}
 
 	export interface Value {
-		value: number | string;
+		value: number | string | Props;
 		computed: boolean;
 		name: string;
 	}

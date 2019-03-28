@@ -24,4 +24,16 @@ describe('Shape test', () => {
 
 		assert.strictEqual(result, baseline);
 	});
+
+	it('should create typings with nested shape', () => {
+		const result = generate({
+			input: path.join(__dirname, '..', '..', 'baselines', 'shape', 'nested.js'),
+			output: path.join(__dirname, 'tmp', 'shape', 'nested.d.ts'),
+		});
+
+		const basePath = path.join(__dirname, '..', '..', 'baselines', 'shape', 'nested.d.ts');
+		const baseline = fs.readFileSync(basePath, 'utf-8');
+
+		assert.strictEqual(result, baseline);
+	});
 });

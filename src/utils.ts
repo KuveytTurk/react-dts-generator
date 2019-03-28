@@ -19,6 +19,7 @@ export function getType(type: string): dom.Type {
 		case 'this': return dom.type.this;
 		case 'element': return 'React.ReactElement<any>';
 		case 'node': return 'React.ReactNode';
+		case 'shape': return type;
 		default: return dom.type.any;
 	}
 }
@@ -50,16 +51,10 @@ export function generateProp(prop: Prop): PropResult {
 	}
 
 	function generateShape(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
-		const shapeDefinition = dom.create.interface(getDeclarationName(name));
 		if (typeof type.value === 'object') {
-			const shapeProp = type.value as Props;
-			Object.keys(shapeProp).forEach(key => {
-				const { required, name } = shapeProp[key];
-				const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
-				shapeDefinition.members.push(dom.create.property(key, getType(name), flag));
-			});
-			const property = dom.create.property(name, getDeclarationName(name), flag);
-			const interfaces = [shapeDefinition];
+			const interfaces: dom.InterfaceDeclaration[] = [];
+			const shapeDefinition = generateShapeInterface(name, type.value as Props, interfaces);
+			const property = dom.create.property(name, shapeDefinition.name, flag);
 			return { property, interfaces };
 		}
 	}
@@ -97,6 +92,24 @@ export function generateProp(prop: Prop): PropResult {
 		const union = dom.create.union(unionTypes);
 		const property = dom.create.property(name, isAnyType ? dom.type.any : union, flag);
 		return { property };
+	}
+
+	function generateShapeInterface(name: string, props: Props, shapes: dom.InterfaceDeclaration[]): dom.InterfaceDeclaration {
+		const interfaceName = getDeclarationName(name);
+		const shapeDefinition = dom.create.interface(interfaceName);
+		Object.keys(props).forEach(key => {
+			const { required, name } = props[key];
+			const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+			let type = getType(name);
+			if (type === 'shape') {
+				const childShape = generateShapeInterface(key, props[key].value as Props, shapes);
+				type = childShape.name
+			}
+			shapeDefinition.members.push(dom.create.property(key, type, flag));
+		});
+
+		shapes.push(shapeDefinition);
+		return shapeDefinition;
 	}
 
 	function makeComment(doc: string): string {
