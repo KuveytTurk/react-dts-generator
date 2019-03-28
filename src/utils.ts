@@ -1,4 +1,12 @@
 import * as dom from './dts-dom';
+import CommentParser from 'comment-parser';
+import { Prop, Props, Type, ValueArray } from 'react-docgen';
+
+export type PropResult = PropDeclaration | undefined;
+export interface PropDeclaration {
+	property: dom.ObjectTypeMember;
+	interfaces?: dom.InterfaceDeclaration[];
+}
 
 export function getType(type: string): dom.Type {
 	switch (type.toLowerCase()) {
@@ -15,32 +23,109 @@ export function getType(type: string): dom.Type {
 	}
 }
 
-export function isFuncProp(type: string): boolean {
-	return type === 'func';
-}
+export function generateProp(prop: Prop): PropResult {
+	function generate(name: string, type: dom.Type, flag: dom.DeclarationFlags): PropResult {
+		const property = dom.create.property(name, type, flag);
+		return { property };
+	}
 
-export function isShapeProp(type: string): boolean {
-	return type === 'shape';
-}
+	function generateFunc(name: string, description: string, flag: dom.DeclarationFlags): PropResult {
+		const result = CommentParser(makeComment(description));
+		if (result && result.length > 0) {
+			const signature = result[0];
+			const parameters: dom.Parameter[] = [];
+			let returnType: dom.Type = dom.type.void;
 
-export function isArrayOfProp(type: string): boolean {
-	return type === 'arrayOf';
-}
+			signature.tags.forEach(item => {
+				if (item.tag === 'param') {
+					const type = item.type ? item.type : 'any';
+					parameters.push(dom.create.parameter(item.name, getType(type)));
+				} else if (item.tag === 'return') {
+					returnType = getType(item.type);
+				}
+			});
+			const property = dom.create.method(name, parameters, returnType, flag);
+			return { property };
+		}
+	}
 
-export function isOneOfProp(type: string): boolean {
-	return type === 'enum';
-}
+	function generateShape(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+		const shapeDefinition = dom.create.interface(getDeclarationName(name));
+		if (typeof type.value === 'object') {
+			const shapeProp = type.value as Props;
+			Object.keys(shapeProp).forEach(key => {
+				const { required, name } = shapeProp[key];
+				const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+				shapeDefinition.members.push(dom.create.property(key, getType(name), flag));
+			});
+			const property = dom.create.property(name, getDeclarationName(name), flag);
+			const interfaces = [shapeDefinition];
+			return { property, interfaces };
+		}
+	}
 
-export function isOneOfTypeProp(type: string): boolean {
-	return type === 'union';
-}
+	function generateArrayOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+		const arrayValue = type.value as Prop;
+		if (typeof arrayValue === 'object') {
+			const property = dom.create.property(name, dom.type.array(getType(arrayValue.name)), flag);
+			return { property };
+		}
+	}
 
-export function makeComment(doc: string): string {
-	return `/**\r\n ${doc} \r\n*/`;
-}
+	function genereteOneOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+		let unions = '';
+		const values = type.value as ValueArray;
+		values.forEach(item => {
+			unions += `${item.value as string} | `;
+		});
+		unions = unions.substr(0, unions.length - 3);
+		const property = dom.create.property(name, unions, flag);
+		return { property };
+	}
 
-export function getDeclarationName(prop: string): string {
-	return prop.charAt(0).toUpperCase() + prop.slice(1);
+	function genereteOneOfType(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+		let isAnyType: boolean = false;
+		const unionTypes: dom.Type[] = [];
+		const values = type.value as ValueArray;
+		values.forEach(item => {
+			const t = getType(item.name);
+			if (t === dom.type.any) {
+				isAnyType = true;
+			}
+			unionTypes.push(getType(item.name));
+		});
+		const union = dom.create.union(unionTypes);
+		const property = dom.create.property(name, isAnyType ? dom.type.any : union, flag);
+		return { property };
+	}
+
+	function makeComment(doc: string): string {
+		return `/**\r\n ${doc} \r\n*/`;
+	}
+
+	function getDeclarationName(prop: string): string {
+		return prop.charAt(0).toUpperCase() + prop.slice(1);
+	}
+
+	const { name, required, type, description } = prop;
+	const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+	switch (type.name.toLowerCase()) {
+		case 'any': return generate(name, dom.type.any, flag);
+		case 'bool': return generate(name, dom.type.boolean, flag);
+		case 'number': return generate(name, dom.type.number, flag);
+		case 'object': return generate(name, dom.type.object, flag);
+		case 'string': return generate(name, dom.type.string, flag);
+		case 'this': return generate(name, dom.type.this, flag);
+		case 'array': return generate(name, dom.type.array(dom.type.any), flag);
+		case 'element': return generate(name, 'React.ReactElement<any>', flag);
+		case 'node': return generate(name, 'React.ReactNode', flag);
+		case 'func': return generateFunc(name, description, flag);
+		case 'shape': return generateShape(name, type, flag);
+		case 'arrayof': return generateArrayOf(name, type, flag);
+		case 'enum': return genereteOneOf(name, type, flag);
+		case 'union': return genereteOneOfType(name, type, flag);
+		default: return generate(name, dom.type.any, flag);
+	}
 }
 
 export function writeGeneric(out: string, type: string): string {
@@ -55,3 +140,4 @@ export function createImport(from: string, defaultImport?: string, namedImport?:
 	}
 	return dom.create.import(from);
 }
+
