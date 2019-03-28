@@ -72,7 +72,7 @@ export function generateProp(prop: Prop): PropResult {
 		}
 	}
 
-	function genereteOneOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+	function generateOneOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
 		let unions = '';
 		const values = type.value as ValueArray;
 		values.forEach(item => {
@@ -83,7 +83,7 @@ export function generateProp(prop: Prop): PropResult {
 		return { property };
 	}
 
-	function genereteOneOfType(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+	function generateOneOfType(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
 		let isAnyType: boolean = false;
 		const unionTypes: dom.Type[] = [];
 		const values = type.value as ValueArray;
@@ -122,8 +122,8 @@ export function generateProp(prop: Prop): PropResult {
 		case 'func': return generateFunc(name, description, flag);
 		case 'shape': return generateShape(name, type, flag);
 		case 'arrayof': return generateArrayOf(name, type, flag);
-		case 'enum': return genereteOneOf(name, type, flag);
-		case 'union': return genereteOneOfType(name, type, flag);
+		case 'enum': return generateOneOf(name, type, flag);
+		case 'union': return generateOneOfType(name, type, flag);
 		default: return generate(name, dom.type.any, flag);
 	}
 }
