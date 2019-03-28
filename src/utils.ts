@@ -1,6 +1,6 @@
 import * as dom from './dts-dom';
 import CommentParser from 'comment-parser';
-import { Prop, Props, Type, ValueArray } from 'react-docgen';
+import { Prop, Props, ValueArray } from 'react-docgen';
 
 export type PropResult = PropDeclaration | undefined;
 export interface PropDeclaration {
@@ -50,29 +50,21 @@ export function generateProp(prop: Prop): PropResult {
 		}
 	}
 
-	function generateShape(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
-		if (typeof type.value === 'object') {
-			const interfaces: dom.InterfaceDeclaration[] = [];
-			const shapeDefinition = generateShapeInterface(name, type.value as Props, interfaces);
-			const property = dom.create.property(name, shapeDefinition.name, flag);
-			return { property, interfaces };
-		}
+	function generateShape(name: string, props: Props, flag: dom.DeclarationFlags): PropDeclaration {
+		const interfaces: dom.InterfaceDeclaration[] = [];
+		const shapeDefinition = generateShapeInterface(name, props, interfaces);
+		const property = dom.create.property(name, shapeDefinition.name, flag);
+		return { property, interfaces };
 	}
 
-	function generateArrayOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
-		const arrayValue = type.value as Prop;
-		if (typeof arrayValue === 'object') {
-			const property = dom.create.property(name, dom.type.array(getType(arrayValue.name)), flag);
-			return { property };
-		}
+	function generateArrayOf(name: string, prop: Prop, flag: dom.DeclarationFlags): PropDeclaration {
+		const property = dom.create.property(name, dom.type.array(getType(prop.name)), flag);
+		return { property };
 	}
 
-	function generateOneOf(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+	function generateOneOf(name: string, values: ValueArray, flag: dom.DeclarationFlags): PropDeclaration {
 		let unions = '';
-		const values = type.value as ValueArray;
-		values.forEach(item => {
-			unions += `${item.value as string} | `;
-		});
+		values.forEach(item => unions += `${item.value as string} | `);
 		unions = unions.substr(0, unions.length - 3);
 		const property = dom.create.property(name, unions, flag);
 		return { property };
@@ -102,6 +94,7 @@ export function generateProp(prop: Prop): PropResult {
 	function generateShapeInterface(name: string, props: Props, shapes: dom.InterfaceDeclaration[]): dom.InterfaceDeclaration {
 		const interfaceName = getDeclarationName(name);
 		const shapeDefinition = dom.create.interface(interfaceName);
+
 		Object.keys(props).forEach(key => {
 			const { required, name } = props[key];
 			const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
@@ -134,6 +127,7 @@ export function generateProp(prop: Prop): PropResult {
 
 	const { name, required, type, description } = prop;
 	const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
+
 	switch (type.name.toLowerCase()) {
 		case 'any': return generate(name, dom.type.any, flag);
 		case 'bool': return generate(name, dom.type.boolean, flag);
@@ -145,9 +139,9 @@ export function generateProp(prop: Prop): PropResult {
 		case 'element': return generate(name, 'React.ReactElement<any>', flag);
 		case 'node': return generate(name, 'React.ReactNode', flag);
 		case 'func': return generateFunc(name, description, flag);
-		case 'shape': return generateShape(name, type, flag);
-		case 'arrayof': return generateArrayOf(name, type, flag);
-		case 'enum': return generateOneOf(name, type, flag);
+		case 'shape': return generateShape(name, type.value as Props, flag);
+		case 'arrayof': return generateArrayOf(name, type.value as Prop, flag);
+		case 'enum': return generateOneOf(name, type.value as ValueArray, flag);
 		case 'union': return generateOneOfType(name, type.value as ValueArray, flag);
 		default: return generate(name, dom.type.any, flag);
 	}
