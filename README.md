@@ -70,20 +70,21 @@ export default class TestClass extends BaseClass<TestClassProps> {}
 
 If the component propTypes has composes by another component's propTypes, and typescript definitions of the other component were already generated they could be imported and generated types extend from them.
 
-```js
-		const result = generate({
-			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'module.js'),
-			output: path.join(__dirname, 'tmp', 'compose', 'module.d.ts'),
-			propTypesComposition: [{
-				named: 'BasicComponentProps',
-				from: '../basic/basic',
-			},
-			{
-				named: 'ComponentBaseProps',
-				from: '@kuveytturk/boa-base/ComponentBase',
-			}],
+```jsx
+TestClass.propTypes = {
+	...BaseClass.propTypes,
+	foo: PropTypes.any,
+}
+```
 
-		});
+```js
+const result = generate({
+	input: path.join('TestClass.js'),
+	propTypesComposition: [{
+		named: 'BaseClass',
+		from: '../base-props-path',
+	}],
+});
 ```
 
 ### Samples
