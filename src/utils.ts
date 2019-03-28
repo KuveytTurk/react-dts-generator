@@ -78,10 +78,9 @@ export function generateProp(prop: Prop): PropResult {
 		return { property };
 	}
 
-	function generateOneOfType(name: string, type: Type, flag: dom.DeclarationFlags): PropResult {
+	function generateOneOfType(name: string, values: ValueArray, flag: dom.DeclarationFlags): PropDeclaration {
 		let isAnyType: boolean = false;
 		const unionTypes: dom.Type[] = [];
-		const values = type.value as ValueArray;
 		const interfaces: dom.InterfaceDeclaration[] = [];
 
 		values.forEach(item => {
@@ -100,19 +99,25 @@ export function generateProp(prop: Prop): PropResult {
 		return { property, interfaces };
 	}
 
-
 	function generateShapeInterface(name: string, props: Props, shapes: dom.InterfaceDeclaration[]): dom.InterfaceDeclaration {
 		const interfaceName = getDeclarationName(name);
 		const shapeDefinition = dom.create.interface(interfaceName);
 		Object.keys(props).forEach(key => {
 			const { required, name } = props[key];
 			const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
-			let type = getType(name);
+			const type = getType(name);
+
 			if (type === 'shape') {
 				const childShape = generateShapeInterface(key, props[key].value as Props, shapes);
-				type = childShape.name
+				shapeDefinition.members.push(dom.create.property(key, childShape.name, flag));
+			} else if (name === 'union') {
+				const union = generateOneOfType(key, props[key].value as ValueArray, flag);
+				shapeDefinition.members.push(union.property);
+				shapes.push(...union.interfaces || []);
+			} else {
+				shapeDefinition.members.push(dom.create.property(key, type, flag));
 			}
-			shapeDefinition.members.push(dom.create.property(key, type, flag));
+
 		});
 
 		shapes.push(shapeDefinition);
@@ -143,7 +148,7 @@ export function generateProp(prop: Prop): PropResult {
 		case 'shape': return generateShape(name, type, flag);
 		case 'arrayof': return generateArrayOf(name, type, flag);
 		case 'enum': return generateOneOf(name, type, flag);
-		case 'union': return generateOneOfType(name, type, flag);
+		case 'union': return generateOneOfType(name, type.value as ValueArray, flag);
 		default: return generate(name, dom.type.any, flag);
 	}
 }

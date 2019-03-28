@@ -26,7 +26,7 @@ describe('OneOfType test', () => {
 
 	});
 
-	it('should create with shape', () => {
+	it('should create typings with shape', () => {
 		const result = generate({
 			input: path.join(__dirname, '..', '..', 'baselines', 'oneOfType', 'withShape.js'),
 			output: path.join(__dirname, 'tmp', 'oneOfType', 'withShape.d.ts'),

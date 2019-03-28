@@ -1,6 +1,6 @@
 declare module "react-docgen" {
 	export type ValueArray = Value[];
-	export type TypeValue = Props | Prop | ValueArray;
+	export type ValueType = Props | Prop | ValueArray;
 
 	export interface ComponentInfo {
 		displayName: string;
@@ -17,7 +17,7 @@ declare module "react-docgen" {
 		required: boolean;
 		type: Type;
 		description: string;
-		value: Value | Props
+		value: ValueType;
 	}
 
 	export interface Value {
@@ -28,7 +28,7 @@ declare module "react-docgen" {
 
 	export interface Type {
 		name: string;
-		value: TypeValue;
+		value: ValueType;
 	}
 
 	export interface Method {
