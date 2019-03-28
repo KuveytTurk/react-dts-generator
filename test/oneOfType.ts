@@ -25,4 +25,16 @@ describe('OneOfType test', () => {
 		assert.strictEqual(result, baseline);
 
 	});
+
+	it('should create with shape', () => {
+		const result = generate({
+			input: path.join(__dirname, '..', '..', 'baselines', 'oneOfType', 'withShape.js'),
+			output: path.join(__dirname, 'tmp', 'oneOfType', 'withShape.d.ts'),
+		});
+
+		const basePath = path.join(__dirname, '..', '..', 'baselines', 'oneOfType', 'withShape.d.ts');
+		const baseline = fs.readFileSync(basePath, 'utf-8');
+
+		assert.strictEqual(result, baseline);
+	});
 });

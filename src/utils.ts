@@ -82,17 +82,24 @@ export function generateProp(prop: Prop): PropResult {
 		let isAnyType: boolean = false;
 		const unionTypes: dom.Type[] = [];
 		const values = type.value as ValueArray;
+		const interfaces: dom.InterfaceDeclaration[] = [];
+
 		values.forEach(item => {
 			const t = getType(item.name);
 			if (t === dom.type.any) {
 				isAnyType = true;
+			} else if (t === 'shape') {
+				const shapeDefinition = generateShapeInterface(name, item.value as Props, interfaces);
+				unionTypes.push(shapeDefinition.name);
+			} else {
+				unionTypes.push(getType(item.name));
 			}
-			unionTypes.push(getType(item.name));
 		});
 		const union = dom.create.union(unionTypes);
 		const property = dom.create.property(name, isAnyType ? dom.type.any : union, flag);
-		return { property };
+		return { property, interfaces };
 	}
+
 
 	function generateShapeInterface(name: string, props: Props, shapes: dom.InterfaceDeclaration[]): dom.InterfaceDeclaration {
 		const interfaceName = getDeclarationName(name);
