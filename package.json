@@ -1,9 +1,9 @@
 {
-	"author": "Kuveyt Turk BOA One Team",
+	"author": "kuveytturk",
 	"description": "Simple .d.ts generator for React components.",
 	"license": "Apache-2.0",
 	"name": "react-dts-generator",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"main": "./bin/src/index.js",
 	"types": "./bin/src/index.d.ts",
 	"files": [

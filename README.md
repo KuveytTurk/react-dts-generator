@@ -1,6 +1,7 @@
 # react-dts-generator 
 
-Simple `.d.ts` generator for React components.
+Simple `.d.ts` generator for React components. Try with [Repl.](https://repl.it/@mozkarakoc/react-dts-generator)
+
 
 ## Installation
 
@@ -23,7 +24,7 @@ const result = generate(options);
 
 #### `input: string`
 
-The `.js` file that contains React Component. `react-dts-generator` use the [`react-docgen`](https://github.com/reactjs/react-docgen) library to generate props and methods. The input file format guideline:
+Path of the `.js` file that contains React Component. `react-dts-generator` use the [`react-docgen`](https://github.com/reactjs/react-docgen) library to generate props and methods. The input file format guideline:
 
 - Modules have to export a single component, and only that component is analyzed.
 - When using `React.createClass`, the component definition (the value passed to it) must resolve to an object literal.
