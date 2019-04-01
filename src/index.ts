@@ -58,6 +58,10 @@ export function generate(options: Options): string {
             if (keys.length > 0) {
                 keys.forEach(key => {
                     const prop = { ...props[key], name: key };
+                    if (!prop.type) {
+                        return;
+                    }
+
                     const propResult = Utils.generateProp(prop);
                     if (propResult) {
                         const { property, interfaces } = propResult;
