@@ -41,9 +41,53 @@ The `.d.ts` file that contains typescript definitions. If not specified output f
 
 If the input component is a base class for another component the type definition could be generated with generic prop types like below. Then, another component could pass own props to the base class definition.
 
+**Input**
+```jsx
+import React from 'react';
+import PropTypes from 'prop-types';
 
+class BaseClass extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.bar = this.bar.bind(this);
+    }
+
+    foo = () => { }
+    bar() { }
+
+    render() {
+        return <div>BaseClass</div>;
+    }
+}
+
+BaseClass.propTypes = {
+    foo: PropTypes.any,
+}
+
+export default BaseClass;
+```
+**Generate**
+
+```js
+const result = generate({
+	input: 'path-to-input',
+	isBaseClass: true,
+});
+```
+
+**Output**
 ```ts
+import * as React from "react";
+
+export interface BaseClassProps {
+  foo?: any;
+}
+
 export default class BaseClass<T = any> extends React.Component<T> {
+  foo(): any;
+  bar(): any;
+}
+
 ```
 
 #### `extends?: { includePropsAsGeneric: boolean, import: ImportType }`
@@ -56,8 +100,43 @@ Should the props of the input component pass to the base class as generic?
 - ```import: ImportType```
 Indicates where the base class located.
 
+**Input**
 
+```jsx
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import BaseClass from './base';
+
+class TestClass extends BaseClass {
+	render() {
+		return <div>TestClass</div>;
+	}
+}
+
+TestClass.propTypes = {
+	foo: PropTypes.any,
+}
+
+export default TestClass;
+```
+**Generate**
+
+```js
+const result = generate({
+	input: 'path-to-input',
+	extends: {
+		import: {
+			default: 'BaseClass',
+			from: './base',
+		},
+		includePropsAsGeneric: true,
+	},
+});
+```
+
+**Output**
 ```ts
+import * as React from "react";
 import BaseClass from "./base";
 
 export interface TestClassProps {
@@ -80,7 +159,7 @@ TestClass.propTypes = {
 
 ```js
 const result = generate({
-	input: path.join('TestClass.js'),
+	input: 'path-to-input',
 	propTypesComposition: [{
 		named: 'BaseClass',
 		from: '../base-props-path',
