@@ -3,7 +3,7 @@ import * as path from 'path';
 import { assert } from 'chai';
 import { generate } from '../src';
 
-describe('ArrayOf test', () => {
+describe('anyFallback test', () => {
 	before(() => {
 		if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
 			fs.mkdirSync(path.join(__dirname, 'tmp'));
