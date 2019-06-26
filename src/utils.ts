@@ -128,22 +128,26 @@ export function generateProp(prop: Prop): PropResult {
 	const { name, required, type, description } = prop;
 	const flag = required ? dom.DeclarationFlags.None : dom.DeclarationFlags.Optional;
 
-	switch (type.name.toLowerCase()) {
-		case 'any': return generate(name, dom.type.any, flag);
-		case 'bool': return generate(name, dom.type.boolean, flag);
-		case 'number': return generate(name, dom.type.number, flag);
-		case 'object': return generate(name, dom.type.object, flag);
-		case 'string': return generate(name, dom.type.string, flag);
-		case 'this': return generate(name, dom.type.this, flag);
-		case 'array': return generate(name, dom.type.array(dom.type.any), flag);
-		case 'element': return generate(name, 'React.ReactElement<any>', flag);
-		case 'node': return generate(name, 'React.ReactNode', flag);
-		case 'func': return generateFunc(name, description, flag);
-		case 'shape': return generateShape(name, type.value as Props, flag);
-		case 'arrayof': return generateArrayOf(name, type.value as Prop, flag);
-		case 'enum': return generateOneOf(name, type.value as ValueArray, flag);
-		case 'union': return generateOneOfType(name, type.value as ValueArray, flag);
-		default: return generate(name, dom.type.any, flag);
+	try {
+		switch (type.name.toLowerCase()) {
+			case 'any': return generate(name, dom.type.any, flag);
+			case 'bool': return generate(name, dom.type.boolean, flag);
+			case 'number': return generate(name, dom.type.number, flag);
+			case 'object': return generate(name, dom.type.object, flag);
+			case 'string': return generate(name, dom.type.string, flag);
+			case 'this': return generate(name, dom.type.this, flag);
+			case 'array': return generate(name, dom.type.array(dom.type.any), flag);
+			case 'element': return generate(name, 'React.ReactElement<any>', flag);
+			case 'node': return generate(name, 'React.ReactNode', flag);
+			case 'func': return generateFunc(name, description, flag);
+			case 'shape': return generateShape(name, type.value as Props, flag);
+			case 'arrayof': return generateArrayOf(name, type.value as Prop, flag);
+			case 'enum': return generateOneOf(name, type.value as ValueArray, flag);
+			case 'union': return generateOneOfType(name, type.value as ValueArray, flag);
+			default: return generate(name, dom.type.any, flag);
+		}
+	} catch (e) {
+		return generate(name, dom.type.any, flag);
 	}
 }
 
@@ -159,4 +163,3 @@ export function createImport(from: string, defaultImport?: string, namedImport?:
 	}
 	return dom.create.import(from);
 }
-
