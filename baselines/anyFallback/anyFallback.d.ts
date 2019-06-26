@@ -1,10 +1,10 @@
 import * as React from "react";
 
-export interface AnyFabllbackComponentProps {
+export interface AnyFallbackComponentProps {
   invalidOptionalOneOf?: any;
   invalidOneOf: any;
 }
 
-export default class AnyFabllbackComponent extends React.Component<
-  AnyFabllbackComponentProps
+export default class AnyFallbackComponent extends React.Component<
+  AnyFallbackComponentProps
 > {}
