@@ -71,4 +71,18 @@ describe('Compose test', () => {
 
 		assert.strictEqual(result, baseline);
 	});
+
+	it('should create typings with declared modules', () => {
+		const result = generate({
+			declaredModule: 'myDeclaredComponent',
+			input: path.join(__dirname, '..', '..', 'baselines', 'compose', 'declaredModule.js'),
+			output: path.join(__dirname, 'tmp', 'compose', 'declaredModule.d.ts')
+
+		});
+
+		const basePath = path.join(__dirname, '..', '..', 'baselines', 'compose', 'declaredModule.d.ts');
+		const baseline = fs.readFileSync(basePath, 'utf-8');
+
+		assert.strictEqual(result, baseline);
+	});
 });

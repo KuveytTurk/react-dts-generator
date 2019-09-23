@@ -167,6 +167,53 @@ const result = generate({
 });
 ```
 
+#### `declaredModule?: string`
+An option to set types for existing JS Libraries.
+
+**Input**
+
+```js
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+
+class MyDeclaredComponent extends React.Component {
+	render() {
+		return <div>MyDeclaredComponent</div>;
+	}
+};
+
+MyDeclaredComponent.propTypes = {
+	temp: PropTypes.any,
+};
+
+export default MyDeclaredComponent;
+```
+
+**Generate**
+
+```js
+const result = generate({
+	declaredModule: 'myDeclaredModule',
+	input: 'path-to-input'
+});
+```
+
+**Output**
+
+```js
+declare module "myDeclaredComponent" {
+  import * as React from "react";
+
+  export interface MyDeclaredComponentProps {
+    temp?: any;
+  }
+
+  export default class MyDeclaredComponent extends React.Component<
+    MyDeclaredComponentProps
+  > {}
+}
+```
+
 ### Samples
 
 Checkout the [baselines](https://github.com/KuveytTurk/react-dts-generator/tree/master/baselines) and [tests](https://github.com/KuveytTurk/react-dts-generator/tree/master/test).

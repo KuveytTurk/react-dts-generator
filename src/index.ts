@@ -22,13 +22,14 @@ export interface Options {
     propTypesComposition?: ImportType[];
     extends?: Extends;
     imports?: ImportType[];
+    declaredModule?: string;
 }
 
 export function generate(options: Options): string {
     let result: string = '';
     let baseType: string = 'React.Component';
 
-    const { input, output, isBaseClass, propTypesComposition, imports } = options;
+    const { input, output, isBaseClass, propTypesComposition, imports, declaredModule } = options;
 
     const content: string = fs.readFileSync(input, 'utf8');
     const componentInfo = DocParser(content);
@@ -114,6 +115,11 @@ export function generate(options: Options): string {
         interfaceDefinitions.forEach(x => result += dom.emit(x));
         classDefinition.baseType = baseType;
         result += dom.emit(classDefinition);
+
+        if (declaredModule) {
+            const capturedResult = result;
+            result = `declare module '${declaredModule}' { ${capturedResult} }`;
+        }
 
         if (result) {
             const fileName = output || input.split('.')[0] + '.d.ts';
