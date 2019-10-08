@@ -1,0 +1,1 @@
+This project uses [dts-dom](https://github.com/RyanCavanaugh/dts-dom) library distributed under Apache License, Version 2.0
